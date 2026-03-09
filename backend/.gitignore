@@ -1,0 +1,15 @@
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### Maven build output ###
+target/
+
+### Spring Boot sensitive files ###
+halaman/src/main/resources/application.properties
+
+### OS files ###
+.DS_Store
+Thumbs.db

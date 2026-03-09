@@ -1,0 +1,25 @@
+spring.application.name=halaman
+
+# Server
+server.port=8080
+
+# Database - Supabase PostgreSQL
+spring.datasource.url=YOUR_JDBC_URL_HEREz
+spring.datasource.username=postgres
+spring.datasource.password=YOUR_PASSWORD_HERE
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.open-in-view=false
+
+# JWT
+app.jwt.secret=YOUR_JWT_SECRET_HERE
+app.jwt.expiration=86400000
+app.jwt.refresh-expiration=604800000
+
+# CORS
+app.cors.allowed-origins=http://localhost:5173
