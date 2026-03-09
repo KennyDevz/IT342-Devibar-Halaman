@@ -1,0 +1,273 @@
+/* ================================
+   DASHBOARD LAYOUT
+   ================================ */
+
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: #F9FAFB;
+}
+
+/* ================================
+   SIDEBAR
+   ================================ */
+
+.sidebar {
+  width: 240px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #2E7D32 0%, #1B5E20 100%);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-logo-icon {
+  font-size: 1.5rem;
+}
+
+.sidebar-logo-name {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.sidebar-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 1rem 0;
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-logout:hover {
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+}
+
+/* ================================
+   MAIN CONTENT
+   ================================ */
+
+.dashboard-main {
+  margin-left: 240px;
+  flex: 1;
+  padding: 2rem;
+}
+
+/* ================================
+   TOPBAR
+   ================================ */
+
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.dashboard-welcome h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #101828;
+  margin: 0 0 0.25rem;
+}
+
+.dashboard-welcome p {
+  color: #6A7282;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* ================================
+   WEATHER WIDGET
+   ================================ */
+
+.weather-widget {
+  background: linear-gradient(135deg, #2E7D32, #66BB6A);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 180px;
+}
+
+.weather-icon { font-size: 1.5rem; }
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.weather-location {
+  font-size: 0.7rem;
+  font-weight: 600;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.weather-temp {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.weather-desc {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ================================
+   PLANT CATALOG SECTION
+   ================================ */
+
+.catalog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.catalog-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #101828;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.catalog-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 1.1rem;
+  background: #2E7D32;
+  border-radius: 2px;
+}
+
+.catalog-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.btn-add-plant {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(180deg, #2E7D32 0%, #66BB6A 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn-add-plant:hover { opacity: 0.9; }
+
+/* ================================
+   EMPTY STATE
+   ================================ */
+
+.catalog-empty {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #F3F4F6;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.catalog-empty-icon { font-size: 3rem; }
+
+.catalog-empty h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #101828;
+  margin: 0;
+}
+
+.catalog-empty p {
+  color: #6A7282;
+  font-size: 0.9rem;
+  margin: 0;
+  max-width: 280px;
+}
