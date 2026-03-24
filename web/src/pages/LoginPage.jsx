@@ -5,6 +5,8 @@ import { loginUser } from '../api/authApi';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import Toast from '../components/Toast';
 import '../styles/auth.css';
+import { useGoogleLogin } from '@react-oauth/google';
+import { googleAuth } from '../api/authApi';
 
 export default function LoginPage() {
   const navigate  = useNavigate();
@@ -44,6 +46,31 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    try {
+      const res = await googleAuth(tokenResponse.access_token);
+      if (res.data.success) {
+        login(
+          {
+            accessToken:  res.data.data.accessToken,
+            refreshToken: res.data.data.refreshToken,
+          },
+          res.data.data.user
+        );
+        navigate('/dashboard', { state: { toast: 'Login successful! Welcome back 🌿' } });
+      } else {
+        setError(res.data.error?.message || 'Google login failed');
+      }
+    } catch (err) {
+      setError('Google login failed. Please try again.');
+    }
+  },
+  onError: () => {
+    setError('Google login failed. Please try again.');
+  }
+});
 
   return (
     <div className="auth-page">
@@ -139,7 +166,7 @@ export default function LoginPage() {
               <span>Or continue with</span>
             </div>
 
-            <button type="button" className="auth-google-btn">
+            <button type="button" className="auth-google-btn" onClick={() => handleGoogleLogin()}>
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"

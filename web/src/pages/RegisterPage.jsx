@@ -5,6 +5,8 @@ import { registerUser } from '../api/authApi';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import Toast from '../components/Toast';
 import '../styles/auth.css';
+import { useGoogleLogin } from '@react-oauth/google';
+import { googleAuth } from '../api/authApi';
 
 export default function RegisterPage() {
   const navigate  = useNavigate();
@@ -64,6 +66,24 @@ export default function RegisterPage() {
       setLoading(false);
     }
   };
+
+  const handleGoogleLogin = useGoogleLogin({
+  onSuccess: async (tokenResponse) => {
+    try {
+      const res = await googleAuth(tokenResponse.access_token);
+      if (res.data.success) {
+        navigate('/login', { state: { toast: 'Account created successfully! Please log in.' } });
+      } else {
+        setApiError(res.data.error?.message || 'Google sign up failed');
+      }
+    } catch (err) {
+      setApiError('Google sign up failed. Please try again.');
+    }
+  },
+  onError: () => {
+    setApiError('Google sign up failed. Please try again.');
+  }
+});
 
   return (
     <div className="auth-page">
@@ -214,7 +234,7 @@ export default function RegisterPage() {
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
 
-            <button type="button" className="auth-google-btn">
+            <button type="button" className="auth-google-btn" onClick={() => handleGoogleLogin()}>
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
