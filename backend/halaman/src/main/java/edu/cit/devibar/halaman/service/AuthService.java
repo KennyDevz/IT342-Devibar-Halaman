@@ -12,6 +12,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import org.springframework.beans.factory.annotation.Value;
+import edu.cit.devibar.halaman.dto.GoogleAuthRequest;
+import java.util.Collections;
 
 @Service
 public class AuthService {
@@ -97,5 +104,76 @@ public class AuthService {
         dataPayload.setRefreshToken(refreshToken);
 
         return AuthResponse.success(dataPayload);
+    }
+
+    // GOOGLE OAUTH
+    public AuthResponse googleAuth(GoogleAuthRequest request) {
+        try {
+            // Use access token to get user info from Google
+            NetHttpTransport transport = new NetHttpTransport();
+            GsonFactory jsonFactory = new GsonFactory();
+
+            // Fetch user info from Google using access token
+            com.google.api.client.http.HttpRequestFactory requestFactory =
+                    transport.createRequestFactory();
+
+            com.google.api.client.http.HttpRequest httpRequest =
+                    requestFactory.buildGetRequest(
+                            new com.google.api.client.http.GenericUrl(
+                                    "https://www.googleapis.com/oauth2/v3/userinfo?access_token="
+                                            + request.getToken()
+                            )
+                    );
+
+            String response = httpRequest.execute().parseAsString();
+
+            // Parse the response
+            com.google.api.client.json.JsonFactory factory = new GsonFactory();
+            com.google.api.client.util.GenericData userData =
+                    factory.fromString(response, com.google.api.client.util.GenericData.class);
+
+            String googleId  = (String) userData.get("sub");
+            String email     = (String) userData.get("email");
+            String firstName = (String) userData.get("given_name");
+            String lastName  = (String) userData.get("family_name");
+
+            if (email == null) {
+                return AuthResponse.error(
+                        "AUTH-003",
+                        "Could not retrieve email from Google",
+                        "Please make sure your Google account has an email"
+                );
+            }
+
+            // Check if user already exists
+            User user = userRepository.findByEmail(email).orElse(null);
+
+            if (user == null) {
+                // New user — create account automatically
+                user = new User();
+                user.setEmail(email);
+                user.setFirstName(firstName != null ? firstName : "");
+                user.setLastName(lastName != null ? lastName : "");
+                user.setGoogleId(googleId);
+                user.setPasswordHash("");
+                user.setRole(User.Role.USER);
+                userRepository.save(user);
+            } else {
+                // Existing user — update google_id if not set
+                if (user.getGoogleId() == null) {
+                    user.setGoogleId(googleId);
+                    userRepository.save(user);
+                }
+            }
+
+            return buildTokenResponse(user);
+
+        } catch (Exception e) {
+            return AuthResponse.error(
+                    "AUTH-003",
+                    "Google authentication failed",
+                    e.getMessage()
+            );
+        }
     }
 }
