@@ -1,9 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Halaman" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.Halaman" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/halaman_green</item>
+        <item name="colorPrimaryVariant">@color/halaman_green_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/halaman_green_light</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- TextInputLayout global style -->
+        <item name="textInputStyle">@style/HalamanTextInputStyle</item>
     </style>
 
-    <style name="Theme.Halaman" parent="Base.Theme.Halaman" />
+    <!-- Custom TextInputLayout Style -->
+    <style name="HalamanTextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">#CCffffff</item>
+        <item name="boxStrokeColor">@color/border</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="passwordToggleTint">@color/halaman_green</item>
+        <item name="errorIconDrawable">@null</item>
+    </style>
+
 </resources>

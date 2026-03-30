@@ -1,3 +1,37 @@
 <resources>
     <string name="app_name">Halaman</string>
+
+    <!-- Login -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="growth_begins_today">GROWTH BEGINS TODAY.</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="log_in">LOG IN →</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up</string>
+
+    <!-- Register -->
+    <string name="join_halaman">Join Halaman</string>
+    <string name="start_journey">START YOUR GROWTH JOURNEY</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="create_account">CREATE ACCOUNT →</string>
+    <string name="already_account">Already a gardener?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="back_to_login">← Back to login</string>
+
+    <!-- Hints -->
+    <string name="hint_first_name">Jane</string>
+    <string name="hint_last_name">Doe</string>
+    <string name="hint_email">example@halaman.com</string>
+    <string name="hint_password">••••••••</string>
+
+    <!-- Dashboard -->
+    <string name="good_day">Good day</string>
+    <string name="my_plants">My Plants</string>
+    <string name="schedule">Schedule</string>
+    <string name="gallery">Gallery</string>
+    <string name="profile">Profile</string>
 </resources>

@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="halaman_green_dark">#1B5E20</color>
+    <color name="halaman_green">#2E7D32</color>
+    <color name="halaman_green_medium">#388E3C</color>
+    <color name="halaman_green_light">#66BB6A</color>
+    <color name="halaman_green_pale">#F0FDF4</color>
+       <color name="white">#FFFFFF</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="background">#F9FAFB</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="text_primary">#101828</color>
+    <color name="text_secondary">#6A7282</color>
+    <color name="text_label">#364153</color>
+    <color name="border">#E5E7EB</color>
+    <color name="error">#DC2626</color>
+    <color name="error_bg">#FEF2F2</color>
+    <color name="error_border">#FECACA</color>
+    <color name="success">#166534</color>
+    <color name="success_bg">#F0FDF4</color>
+    <color name="success_border">#BBF7D0</color>
 </resources>
