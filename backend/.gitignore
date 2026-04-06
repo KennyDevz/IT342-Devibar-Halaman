@@ -13,3 +13,5 @@ halaman/src/main/resources/application.properties
 ### OS files ###
 .DS_Store
 Thumbs.db
+
+uploads/

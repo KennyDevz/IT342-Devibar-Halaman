@@ -36,7 +36,7 @@ export default function LoginPage() {
           },
           res.data.data.user
         );
-        navigate('/dashboard', { state: { toast: 'Login successful! Welcome back 🌿' } });
+        navigate('/my-plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
       } else {
         setError(res.data.error?.message || 'Login failed');
       }
@@ -59,7 +59,7 @@ export default function LoginPage() {
           },
           res.data.data.user
         );
-        navigate('/dashboard', { state: { toast: 'Login successful! Welcome back 🌿' } });
+        navigate('/my-plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
       } else {
         setError(res.data.error?.message || 'Google login failed');
       }
