@@ -1,6 +1,9 @@
 package edu.cit.devibar.halaman.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class AuthResponse {
 
@@ -9,21 +12,29 @@ public class AuthResponse {
     private ErrorPayload error;
     private String timestamp;
 
+
     // --- Inner classes ---
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class DataPayload {
         private UserDto user;
         private String accessToken;
         private String refreshToken;
+        private PlantResponse plant;
+        private List<PlantResponse> plants;
 
         // Getters
         public UserDto getUser()       { return user; }
         public String getAccessToken()    { return accessToken; }
         public String getRefreshToken()   { return refreshToken; }
+        public PlantResponse getPlant()              { return plant; }
+        public List<PlantResponse> getPlants()       { return plants; }
 
         // Setters
         public void setUser(UserDto user)             { this.user = user; }
         public void setAccessToken(String accessToken){ this.accessToken = accessToken; }
         public void setRefreshToken(String token)     { this.refreshToken = token; }
+        public void setPlant(PlantResponse plant)    { this.plant = plant; }
+        public void setPlants(List<PlantResponse> plants) { this.plants = plants; }
     }
 
     public static class UserDto {
