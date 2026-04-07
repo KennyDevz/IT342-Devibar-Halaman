@@ -1,5 +1,6 @@
 package edu.cit.devibar.halaman.controller;
 
+import edu.cit.devibar.halaman.dto.ApiResponseFactory;
 import edu.cit.devibar.halaman.dto.AuthResponse;
 import edu.cit.devibar.halaman.dto.PlantRequest;
 import edu.cit.devibar.halaman.entity.Plant;
@@ -16,6 +17,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -99,18 +103,17 @@ public class PlantController {
 
         try {
             PlantImage savedImage = plantImageService.uploadAndSaveImage(id, file);
+            // 1. Put our raw data into a safe Map
+            Map<String, Object> data = new HashMap<>();
+            data.put("imageId", savedImage.getImageId());
+            data.put("fileUrl", savedImage.getFileUrl());
+            data.put("uploadedAt", savedImage.getUploadedAt());
 
-            // Matches SDD response format
-            String responseJson = String.format(
-                    "{\"success\":true, \"data\": {\"imageId\":\"%s\", \"fileUrl\":\"%s\", \"uploadedAt\":\"%s\"}}",
-                    savedImage.getImageId(), savedImage.getFileUrl(), savedImage.getUploadedAt()
-            );
-
-            return ResponseEntity.ok().body(responseJson);
+            // 2. Hand the data to the Factory
+            return ApiResponseFactory.success("Image uploaded successfully", data);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"success\":false, \"error\":{\"message\":\"Image upload failed\"}}");
+            return ApiResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR, "Image upload failed");
         }
     }
 
@@ -118,24 +121,20 @@ public class PlantController {
     @GetMapping("/{id}/images")
     public ResponseEntity<?> getPlantImages(@PathVariable UUID id) {
         try {
-            // Ask the service for the data
-            java.util.List<PlantImage> images =
-                    plantImageService.getImagesForPlant(id);
+            List<PlantImage> images = plantImageService.getImagesForPlant(id);
 
-            // Map the data to safely match your SDD JSON structure
-            java.util.List<java.util.Map<String, Object>> responseData = images.stream().map(img -> {
-                java.util.Map<String, Object> map = new java.util.HashMap<>();
+            List<Map<String, Object>> responseData = images.stream().map(img -> {
+                Map<String, Object> map = new HashMap<>();
                 map.put("imageId", img.getImageId());
                 map.put("fileUrl", img.getFileUrl());
                 map.put("uploadedAt", img.getUploadedAt());
                 return map;
             }).collect(Collectors.toList());
 
-            return ResponseEntity.ok(java.util.Map.of("success", true, "data", responseData));
+            return ApiResponseFactory.success("Images retrieved successfully", responseData);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"success\":false, \"error\":{\"message\":\"Failed to fetch images\"}}");
+            return ApiResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch images");
         }
     }
 }
