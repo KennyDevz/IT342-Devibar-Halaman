@@ -21,12 +21,14 @@ public class PlantService {
     private final PlantRepository plantRepository;
     private final UserRepository userRepository;
     private final CareScheduleService careScheduleService;
+    private final PlantDeletionFacade plantDeletionFacade;
 
     public PlantService(PlantRepository plantRepository,
-                        UserRepository userRepository, CareScheduleService careScheduleService) {
+                        UserRepository userRepository, CareScheduleService careScheduleService, PlantDeletionFacade plantDeletionFacade) {
         this.plantRepository = plantRepository;
         this.userRepository = userRepository;
         this.careScheduleService = careScheduleService;
+        this.plantDeletionFacade = plantDeletionFacade;
     }
 
     // ==========================================
@@ -148,7 +150,7 @@ public class PlantService {
     }
 
     // ==========================================
-    // DELETE PLANT (Enhanced Soft Delete)
+    // DELETE PLANT (Enhanced Soft Delete via Facade)
     // ==========================================
     @Transactional
     public AuthResponse deletePlant(UUID plantId, UUID userId) {
@@ -164,25 +166,8 @@ public class PlantService {
             return AuthResponse.error("AUTH-003", "Forbidden", "You do not have access to this plant");
         }
 
-        LocalDateTime now = LocalDateTime.now();
-
-        // 1. Soft delete the Plant itself
-        plant.setDeletedAt(now);
-
-        // 2. Soft delete related Maintenance Logs
-        if (plant.getMaintenanceLogs() != null) {
-            plant.getMaintenanceLogs().forEach(log -> log.setDeletedAt(now));
-        }
-
-        // 3. Soft delete related Care Schedules
-        if (plant.getCareSchedules() != null) {
-            plant.getCareSchedules().forEach(schedule -> schedule.setDeletedAt(now));
-        }
-
-        // 4. Soft delete related Plant Images
-        if (plant.getImages() != null) {
-            plant.getImages().forEach(image -> image.setDeletedAt(now));
-        }
+        // REFACTORED: Delegate the entire complex orchestration to the Facade
+        plantDeletionFacade.executeSoftDelete(plant);
 
         plantRepository.save(plant);
 
