@@ -6,33 +6,55 @@ import java.util.UUID;
 
 public class PlantResponse {
 
-    private UUID plantId;
-    private String nickname;
-    private String speciesName;
-    private Integer wateringFrequencyDays;
-    private LocalDateTime createdAt;
+    private final UUID plantId;
+    private final String nickname;
+    private final String speciesName;
+    private final Integer wateringFrequencyDays;
+    private final LocalDateTime createdAt;
 
-    // Getters
+    // Private constructor forces the use of the Builder
+    private PlantResponse(Builder builder) {
+        this.plantId = builder.plantId;
+        this.nickname = builder.nickname;
+        this.speciesName = builder.speciesName;
+        this.wateringFrequencyDays = builder.wateringFrequencyDays;
+        this.createdAt = builder.createdAt;
+    }
+
+    // Getters only - No setters! The object is now strictly immutable.
     public UUID getPlantId(){ return plantId; }
     public String getNickname(){ return nickname; }
     public String getSpeciesName(){ return speciesName; }
     public Integer getWateringFrequencyDays(){ return wateringFrequencyDays; }
     public LocalDateTime getCreatedAt(){ return createdAt; }
 
-    // Setters
-    public void setPlantId(UUID plantId){ this.plantId = plantId; }
-    public void setNickname(String nickname){ this.nickname = nickname; }
-    public void setSpeciesName(String speciesName){ this.speciesName = speciesName; }
-    public void setWateringFrequencyDays(Integer days){ this.wateringFrequencyDays = days; }
-    public void setCreatedAt(LocalDateTime createdAt){ this.createdAt = createdAt; }
+    // The Builder static class
+    public static class Builder {
+        private UUID plantId;
+        private String nickname;
+        private String speciesName;
+        private Integer wateringFrequencyDays;
+        private LocalDateTime createdAt;
 
+        public Builder plantId(UUID plantId) { this.plantId = plantId; return this; }
+        public Builder nickname(String nickname) { this.nickname = nickname; return this; }
+        public Builder speciesName(String speciesName) { this.speciesName = speciesName; return this; }
+        public Builder wateringFrequencyDays(Integer days) { this.wateringFrequencyDays = days; return this; }
+        public Builder createdAt(LocalDateTime createdAt) { this.createdAt = createdAt; return this; }
+
+        public PlantResponse build() {
+            return new PlantResponse(this);
+        }
+    }
+
+    // Updated fromEntity mapping method using the Builder
     public static PlantResponse fromEntity(Plant plant) {
-        PlantResponse response = new PlantResponse();
-        response.setPlantId(plant.getPlantId());
-        response.setNickname(plant.getNickname());
-        response.setSpeciesName(plant.getSpeciesName());
-        response.setWateringFrequencyDays(plant.getWateringFrequencyDays());
-        response.setCreatedAt(plant.getCreatedAt());
-        return response;
+        return new Builder()
+                .plantId(plant.getPlantId())
+                .nickname(plant.getNickname())
+                .speciesName(plant.getSpeciesName())
+                .wateringFrequencyDays(plant.getWateringFrequencyDays())
+                .createdAt(plant.getCreatedAt())
+                .build();
     }
 }
