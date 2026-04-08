@@ -33,7 +33,8 @@ public class AuthController {
     // POST /api/v1/auth/login
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        AuthResponse response = authService.login(request);
+        AuthResponse response = authService.authenticate("STANDARD", request);
+
         HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(status).body(response);
     }
@@ -41,7 +42,8 @@ public class AuthController {
     // POST /api/auth/oauth/google
     @PostMapping("/oauth/google")
     public ResponseEntity<AuthResponse> googleAuth(@Valid @RequestBody GoogleAuthRequest request) {
-        AuthResponse response = authService.googleAuth(request);
+        AuthResponse response = authService.authenticate("GOOGLE", request);
+
         HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
         return ResponseEntity.status(status).body(response);
     }
