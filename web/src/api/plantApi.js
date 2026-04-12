@@ -15,3 +15,32 @@ export const getPlantSchedule = (plantId) => api.get(`/api/plants/${plantId}/sch
 
 export const logMaintenance = (data) => api.post('/api/maintenance', data);
 export const getPlantMaintenanceLogs = (plantId) => api.get(`/api/maintenance/${plantId}`);
+
+export const getCurrentWeather = () => {
+    return api.get('/api/weather/current'); 
+};
+
+export const getPlantImageHistory = (plantId) => {
+    return api.get(`/api/plants/${plantId}/images/history`);
+};
+
+export const uploadMilestoneImage = (plantId, formData) => {
+    return api.post(`/api/plants/${plantId}/images`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+};
+
+export const getRecycledPlants = () => {
+    return api.get('/api/plants/recycle-bin');
+};
+
+
+export const restorePlant = (plantId) => {
+    return api.put(`/api/plants/${plantId}/restore`);
+};
+
+export const permanentlyDeletePlant = (plantId) => {
+    return api.delete(`/api/plants/${plantId}/permanent`);
+};
