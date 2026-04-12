@@ -22,8 +22,8 @@ export default function LogCareModal({ plant, onClose, onSuccess }) {
       const res = await logMaintenance(payload);
       
       if (res.data.success) {
-        onSuccess(); // Trigger the parent to refresh the data
-        onClose();   // Close the modal
+        onSuccess(); 
+        onClose();   
       } else {
         setError(res.data.error?.message || "Failed to log care.");
       }
@@ -67,7 +67,6 @@ export default function LogCareModal({ plant, onClose, onSuccess }) {
             </div>
           </div>
 
-          {/* Date Completed (Read Only for Phase 3) */}
           <div className="care-field">
             <label className="care-label">Date Completed</label>
             <div className="care-input-wrapper">

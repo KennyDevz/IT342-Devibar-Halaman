@@ -1,34 +1,30 @@
 import { useState, useEffect } from 'react';
 import { MoreVertical, Pencil, Trash2, Droplets, Thermometer } from 'lucide-react';
-import { getPlantImages } from '../api/plantApi';
+import { usePlants } from '../context/PlantContext';
 
 export default function PlantCard({ plant, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [imageUrl, setImageUrl] = useState(null);
+  const { images, loadPlantImage } = usePlants();
+  const imageUrl = images[plant.plantId];
 
-  // Fetch the uploaded image for this specific plant
   useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const res = await getPlantImages(plant.plantId);
-        
-        if (res.data.success && res.data.data && res.data.data.length > 0) {
-          setImageUrl(res.data.data[0].fileUrl);
-        }
-      } catch (err) {
-        console.error("Could not load image for plant", plant.plantId);
-      }
-    };
-    fetchImage();
-  }, [plant.plantId]);
+    loadPlantImage(plant.plantId);
+  }, [plant.plantId, loadPlantImage]);
 
   const getStatus = () => {
-    if (!plant.nextDueDate) return 'watered';
-    const now  = new Date();
-    const due  = new Date(plant.nextDueDate);
-    const diff = Math.floor((due - now) / (1000 * 60 * 60 * 24));
-    if (diff < 0)  return 'overdue';
-    if (diff === 0) return 'due-today';
+    if (!plant.nextDueDate) return 'watered'; 
+    
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const dueDate = new Date(plant.nextDueDate);
+    dueDate.setHours(0, 0, 0, 0);
+    
+    const diffTime = dueDate.getTime() - today.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 0) return 'overdue';
+    if (diffDays === 0) return 'due-today';
     return 'watered';
   };
 

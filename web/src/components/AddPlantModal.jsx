@@ -73,15 +73,12 @@ export default function AddPlantModal({ onClose, onSuccess }) {
         if (imageFile) {
           setLoadingText('Uploading photo...');
           const formData = new FormData();
-          formData.append('file', imageFile); // The backend expects a multipart 'file' part
+          formData.append('file', imageFile); 
           
           try {
             await uploadPlantImage(newPlant.plantId, formData);
-            // Optionally, you could attach the returned image URL to the newPlant object here
           } catch (imgErr) {
             console.error("Image upload failed, but plant was created.", imgErr);
-            // We don't block success if only the image fails, 
-            // but you could add a toast notification here.
           }
         }
 
