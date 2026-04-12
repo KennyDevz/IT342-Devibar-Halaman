@@ -1,63 +1,59 @@
 import { ArrowLeft, Droplets, Calendar, Plus, Scissors, Sparkles, RefreshCw, Archive } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getPlantImages, getPlantSchedule, getPlantMaintenanceLogs } from '../api/plantApi';
+import { getPlantMaintenanceLogs } from '../api/plantApi';
 import LogCareModal from '../components/LogCareModal';
+import { usePlants } from '../context/PlantContext'; 
 
 export default function PlantDetailsPage({ plant, onBack }) {
-  const [imageUrl, setImageUrl] = useState(null);
-  const [schedule, setSchedule] = useState(null);
-  const [logs, setLogs] = useState([]); // NEW: State for history
+  const { fetchPlants, images, loadPlantImage } = usePlants(); 
+  
+  const imageUrl = images[plant.plantId];
+  // Removed the schedule state entirely! We will use plant.nextDueDate
+  const [logs, setLogs] = useState([]); 
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
+    loadPlantImage(plant.plantId);
+    
     const loadDetails = async () => {
       try {
-        // 1. Fetch Images
-        const imgRes = await getPlantImages(plant.plantId);
-        if (imgRes.data.success && imgRes.data.data.length > 0) {
-          setImageUrl(imgRes.data.data[0].fileUrl);
-        }
-
-        // 2. Fetch Schedule
-        const schedRes = await getPlantSchedule(plant.plantId);
-        if (schedRes.data.success) {
-          setSchedule(schedRes.data.data);
-        }
-
-        // 3. Fetch Maintenance History
-        try {
-            const logsRes = await getPlantMaintenanceLogs(plant.plantId);
-            if (logsRes.data.success) {
-            setLogs(logsRes.data.data);
+        const logsRes = await getPlantMaintenanceLogs(plant.plantId);
+        
+        if (logsRes.data.success) {
+            const logsArray = logsRes.data.data?.logs || logsRes.data.data || [];
+            
+            if (Array.isArray(logsArray)) {
+                setLogs(logsArray);
+            } else {
+                setLogs([]);
             }
-        } catch (err) {
-            console.log("Could not load maintenance logs.");
         }
-
       } catch (err) {
-        console.error("Failed to load details", err);
+        console.log("Could not load maintenance logs.", err);
       }
     };
+    
     loadDetails();
-  }, [plant.plantId, refreshTrigger]); // FIXED: Added refreshTrigger so it reloads after logging!
+  }, [plant.plantId, refreshTrigger, loadPlantImage]); 
 
-  // Calculate days until next water
+  // --- USE THE PLANT PROP INSTEAD OF A SEPARATE API CALL ---
   const getDaysUntilWater = () => {
-    if (!schedule || !schedule.nextDueDate) return "Unknown";
+    if (!plant.nextDueDate) return "Unknown";
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const dueDate = new Date(schedule.nextDueDate);
+    
+    const dueDate = new Date(plant.nextDueDate);
     dueDate.setHours(0, 0, 0, 0);
     
-    const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.round((dueDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
     
     if (diffDays < 0) return "Overdue";
     if (diffDays === 0) return "Today";
     return `In ${diffDays} Days`;
   };
 
-  // Helper function to format the dates for the timeline
   const formatLogDate = (dateString) => {
     const date = new Date(dateString);
     const today = new Date();
@@ -68,7 +64,6 @@ export default function PlantDetailsPage({ plant, onBack }) {
     return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }).toUpperCase();
   };
 
-  // Helper function to get the right icon based on task
   const getTaskIcon = (taskType, isActive) => {
     const color = isActive ? "white" : "#99A1AF";
     switch(taskType) {
@@ -105,11 +100,6 @@ export default function PlantDetailsPage({ plant, onBack }) {
             <h1>{plant.nickname}</h1>
             <div className="hero-badges">
               <span className="species-text">{plant.speciesName}</span>
-              <div className="dot-separator"></div>
-              <div style={{background: '#F0FDF4', color: '#2E7D32', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px'}}>
-                <div style={{width: '6px', height: '6px', background: '#2E7D32', borderRadius: '50%', opacity: 0.5}}></div>
-                Healthy
-              </div>
             </div>
           </div>
         </div>
@@ -145,7 +135,7 @@ export default function PlantDetailsPage({ plant, onBack }) {
               const isLast = index === logs.length - 1;
               
               return (
-                <div className="timeline-item" key={log.maintenanceId}>
+                <div className="timeline-item" key={log.maintenanceId || index}>
                   <div className="timeline-line-container">
                     <div className={`timeline-icon ${isFirst ? 'active' : ''}`}>
                       {getTaskIcon(log.taskType, isFirst)}
@@ -154,7 +144,8 @@ export default function PlantDetailsPage({ plant, onBack }) {
                   </div>
                   <div className="timeline-content">
                     <div className="timeline-header">
-                      <h4>{log.taskType.charAt(0) + log.taskType.slice(1).toLowerCase()}</h4>
+                      {/* Safety check: ensure taskType exists before calling .charAt() */}
+                      <h4>{log.taskType ? log.taskType.charAt(0) + log.taskType.slice(1).toLowerCase() : 'Task'}</h4>
                       <span className="timeline-date">{formatLogDate(log.completedAt)}</span>
                     </div>
                     {log.notes && <p className="timeline-notes">{log.notes}</p>}
@@ -172,6 +163,7 @@ export default function PlantDetailsPage({ plant, onBack }) {
           onClose={() => setIsLogModalOpen(false)}
           onSuccess={() => {
             setRefreshTrigger(prev => prev + 1); 
+            fetchPlants(); 
           }}
         />
       )}
