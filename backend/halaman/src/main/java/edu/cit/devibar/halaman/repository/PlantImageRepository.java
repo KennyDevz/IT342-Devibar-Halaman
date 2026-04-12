@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface PlantImageRepository extends JpaRepository<PlantImage, UUID> {
     List<PlantImage> findByPlantPlantIdAndDeletedAtIsNull(UUID plantId);
+
+    List<PlantImage> findByPlantPlantIdAndDeletedAtIsNullOrderByUploadedAtAsc(UUID plantId);
 }
