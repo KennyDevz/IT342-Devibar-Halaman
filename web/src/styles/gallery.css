@@ -1,0 +1,437 @@
+.gallery-container {
+    padding: 20px;
+}
+
+.gallery-header {
+    margin-bottom: 24px;
+}
+
+.gallery-subtitle {
+    color: #6B7280;
+    margin-top: 8px;
+}
+
+.gallery-loading {
+    color: #6B7280;
+    font-style: italic;
+}
+
+/* Forces the perfect Instagram-style square grid */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.gallery-card {
+    cursor: pointer;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    aspect-ratio: 1 / 1;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gallery-card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+/* Subtle dark gradient overlay so text is always readable */
+.gallery-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    padding: 20px 12px 12px;
+    color: white;
+}
+
+.gallery-card-overlay h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Timeline Layout Elements */
+.timeline-container {
+    padding: 20px;
+}
+
+.timeline-nav {
+    padding-bottom: 20px;
+}
+
+.timeline-placeholder {
+    text-align: center;
+    color: #6B7280;
+    padding: 40px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    border: 1px dashed #D1D5DB;
+}
+
+/* ==========================================
+   GROWTH TIMELINE COMPONENT STYLES
+   ========================================== */
+
+.timeline-loading,
+.timeline-error {
+    text-align: center;
+    padding: 40px;
+    color: #6B7280;
+}
+
+.timeline-error {
+    color: #EF4444; /* Red for errors */
+}
+
+.timeline-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    border: 1px dashed #D1D5DB;
+}
+
+.timeline-empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.timeline-empty h3 {
+    margin: 0 0 8px 0;
+    color: #374151;
+}
+
+.timeline-empty p {
+    margin: 0;
+    color: #6B7280;
+}
+
+/* ==========================================
+   MILESTONE CARD GRID (Replaces Vertical Timeline)
+   ========================================== */
+
+.milestone-container {
+    margin-top: 10px;
+}
+
+/* Controls Header */
+.milestone-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.sort-dropdown {
+    padding: 10px 16px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-upload-milestone {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #4CAF50; /* Match your green theme */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(76, 175, 80, 0.4);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-upload-milestone:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px -1px rgba(76, 175, 80, 0.5);
+}
+
+/* Grid Layout */
+.milestone-grid {
+    display: grid;
+    /* Adjusts size to match the smaller cards in your image */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+/* Polarod-Style Card */
+.milestone-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #F3F4F6;
+    display: flex;
+    flex-direction: column;
+}
+
+.milestone-image-wrapper {
+    position: relative;
+    padding: 12px 12px 0 12px; /* White border around top/sides like a polaroid */
+    background: white;
+}
+
+.milestone-image {
+    width: 100%;
+    aspect-ratio: 3 / 4; /* Standard portrait ratio */
+    object-fit: cover;
+    border-radius: 8px;
+    background: #F9FAFB;
+}
+
+.milestone-tag {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    background: white;
+    color: #4CAF50;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+.milestone-content {
+    padding: 16px 12px;
+    background: white;
+}
+
+.milestone-date {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #9CA3AF;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.milestone-caption {
+    font-size: 0.875rem;
+    color: #4B5563;
+    line-height: 1.4;
+    margin: 0;
+    font-style: italic;
+}
+
+/* ==========================================
+   UPLOAD MODAL STYLES
+   ========================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    animation: modalSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #111827;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    color: #6B7280;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    display: flex;
+    transition: background-color 0.2s;
+}
+
+.btn-close-modal:hover {
+    background-color: #F3F4F6;
+    color: #111827;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.modal-error {
+    background-color: #FEF2F2;
+    color: #DC2626;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    border: 1px solid #F87171;
+}
+
+.upload-dropzone {
+    border: 2px dashed #D1D5DB;
+    border-radius: 12px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+    overflow: hidden;
+    background-color: #F9FAFB;
+}
+
+.upload-dropzone:hover {
+    border-color: #4CAF50;
+    background-color: #F0FDF4;
+}
+
+.upload-dropzone.has-image {
+    border: none;
+    background-color: #000; /* Dark background for image preview */
+}
+
+.upload-prompt {
+    text-align: center;
+    color: #6B7280;
+}
+
+.upload-prompt p {
+    margin: 12px 0 4px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.upload-prompt span {
+    font-size: 0.75rem;
+}
+
+.upload-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.modal-textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.modal-textarea:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    background-color: #F9FAFB;
+    border-top: 1px solid #F3F4F6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-cancel {
+    background: white;
+    border: 1px solid #D1D5DB;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #F3F4F6;
+}
+
+.btn-submit {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+.btn-submit:disabled {
+    background-color: #9CA3AF;
+    cursor: not-allowed;
+}

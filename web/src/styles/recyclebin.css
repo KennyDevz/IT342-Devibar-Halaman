@@ -1,0 +1,341 @@
+/* ==========================================
+   RECYCLE BIN UI (Centered & Aligned)
+   ========================================== */
+
+.rb-page-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.rb-container {
+    width: 100%;
+    max-width: 950px; /* Matches the proportional width in your design */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Top Header Area --- */
+.rb-top-bar {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #9CA3AF;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rb-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* This perfectly aligns the buttons with the text */
+    width: 100%;
+}
+
+.rb-title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.rb-title-section h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.rb-title-section p {
+    margin: 0;
+    color: #6B7280;
+    font-size: 0.95rem;
+}
+
+.rb-bulk-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.btn-restore-all {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid #D1FAE5;
+    background-color: #ECFDF5;
+    color: #10B981;
+}
+
+.btn-empty-bin {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: 1px solid #FEE2E2;
+    background-color: #FEF2F2;
+    color: #EF4444;
+}
+
+/* --- Main White Card & List Items --- */
+.rb-list-wrapper {
+    background: #FFFFFF;
+    border-radius: 32px; /* That large, smooth corner from your design */
+    padding: 32px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+    box-sizing: border-box;
+}
+
+.rb-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #F9FAFB;
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.rb-list-item:last-child {
+    margin-bottom: 0;
+}
+
+.rb-item-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.rb-item-image {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    object-fit: cover;
+    background-color: #E5E7EB;
+}
+
+.rb-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.rb-item-info h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.rb-item-info .species {
+    margin: 0;
+    font-size: 0.75rem;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.rb-item-info .deleted-date {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #D1D5DB;
+}
+
+.rb-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.btn-restore-single {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: 1px solid #E5E7EB;
+    background: white;
+    color: #10B981;
+    font-weight: 800;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.btn-delete-single {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid #E5E7EB;
+    background: white;
+    color: #EF4444;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+/* Hover effects */
+.btn-restore-all:hover, .btn-empty-bin:hover, .btn-restore-single:hover, .btn-delete-single:hover {
+    transform: translateY(-1px);
+    transition: all 0.2s;
+}
+
+/* ==========================================
+   MODAL UI STYLES
+   ========================================== */
+
+.rb-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(243, 244, 246, 0.8); /* Slight frosted/gray look from your mockup */
+    backdrop-filter: blur(2px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.rb-modal-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px 24px 24px 24px;
+    width: 100%;
+    max-width: 340px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Icon Badges */
+.rb-modal-icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.rb-modal-icon-wrapper.danger {
+    background-color: #FEF2F2;
+    color: #EF4444;
+}
+
+.rb-modal-icon-wrapper.success {
+    background-color: #ECFDF5;
+    color: #2E7D32; /* Deep green from your mockup */
+}
+
+/* Typography */
+.rb-modal-subtitle {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 8px 0;
+}
+
+.rb-modal-subtitle.danger { color: #EF4444; }
+.rb-modal-subtitle.success { color: #111827; }
+
+.rb-modal-title {
+    margin: 0 0 12px 0;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #111827;
+}
+
+.rb-modal-desc {
+    font-size: 0.9rem;
+    color: #6B7280;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+}
+
+.rb-modal-desc strong.danger-text {
+    color: #EF4444;
+}
+
+/* Buttons */
+.rb-modal-btn-main {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rb-modal-btn-main.danger {
+    background-color: #FA2A3B; /* Punchy red from mockup */
+    box-shadow: 0 8px 20px rgba(250, 42, 59, 0.3);
+}
+
+.rb-modal-btn-main.success {
+    background-color: #388E3C; /* Deep green from mockup */
+    box-shadow: 0 8px 20px rgba(56, 142, 60, 0.3);
+}
+
+.rb-modal-btn-main:hover {
+    transform: translateY(-2px);
+}
+
+.rb-modal-btn-main:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.rb-modal-btn-cancel {
+    background: none;
+    border: none;
+    color: #9CA3AF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+}
+
+.rb-modal-btn-cancel:hover {
+    color: #6B7280;
+}
