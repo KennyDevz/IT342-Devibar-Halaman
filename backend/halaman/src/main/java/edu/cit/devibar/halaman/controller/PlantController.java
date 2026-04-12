@@ -2,12 +2,10 @@ package edu.cit.devibar.halaman.controller;
 
 import edu.cit.devibar.halaman.dto.ApiResponseFactory;
 import edu.cit.devibar.halaman.dto.AuthResponse;
+import edu.cit.devibar.halaman.dto.PlantImageResponse;
 import edu.cit.devibar.halaman.dto.PlantRequest;
-import edu.cit.devibar.halaman.entity.Plant;
 import edu.cit.devibar.halaman.entity.PlantImage;
 import edu.cit.devibar.halaman.entity.User;
-import edu.cit.devibar.halaman.repository.PlantImageRepository;
-import edu.cit.devibar.halaman.service.FileStorageService;
 import edu.cit.devibar.halaman.service.PlantImageService;
 import edu.cit.devibar.halaman.service.PlantService;
 import jakarta.validation.Valid;
@@ -99,15 +97,19 @@ public class PlantController {
     @PostMapping("/{id}/images")
     public ResponseEntity<?> uploadPlantImage(
             @PathVariable UUID id,
-            @RequestParam("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "caption", required = false) String caption) {
 
         try {
-            PlantImage savedImage = plantImageService.uploadAndSaveImage(id, file);
+            // 2. PASS THE CAPTION TO YOUR SERVICE
+            PlantImage savedImage = plantImageService.uploadAndSaveImage(id, file, caption);
+
             // 1. Put our raw data into a safe Map
             Map<String, Object> data = new HashMap<>();
             data.put("imageId", savedImage.getImageId());
             data.put("fileUrl", savedImage.getFileUrl());
             data.put("uploadedAt", savedImage.getUploadedAt());
+            data.put("caption", savedImage.getCaption()); 
 
             // 2. Hand the data to the Factory
             return ApiResponseFactory.success("Image uploaded successfully", data);
@@ -136,5 +138,39 @@ public class PlantController {
         } catch (Exception e) {
             return ApiResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch images");
         }
+    }
+
+    @GetMapping("/{plantId}/images/history")
+    public ResponseEntity<List<PlantImageResponse>> getPlantImageHistory(@PathVariable UUID plantId) {
+        List<PlantImageResponse> history = plantImageService.getImageHistory(plantId);
+        return ResponseEntity.ok(history);
+    }
+
+
+    // GET /api/plants/recycle-bin
+    @GetMapping("/recycle-bin")
+    public ResponseEntity<AuthResponse> getRecycleBin(@AuthenticationPrincipal User user) {
+        AuthResponse response = plantService.getDeletedPlants(user.getUserId());
+        return ResponseEntity.ok(response);
+    }
+
+    // PUT /api/plants/{id}/restore
+    @PutMapping("/{id}/restore")
+    public ResponseEntity<AuthResponse> restorePlant(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User user) {
+        AuthResponse response = plantService.restorePlant(id, user.getUserId());
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    // DELETE /api/plants/{id}/permanent
+    @DeleteMapping("/{id}/permanent")
+    public ResponseEntity<AuthResponse> permanentlyDeletePlant(
+            @PathVariable UUID id,
+            @AuthenticationPrincipal User user) {
+        AuthResponse response = plantService.permanentlyDeletePlant(id, user.getUserId());
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
     }
 }

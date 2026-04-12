@@ -14,6 +14,9 @@ public interface PlantRepository extends JpaRepository<Plant, UUID> {
     // Get all active plants for a user (not soft deleted)
     List<Plant> findByUserUserIdAndDeletedAtIsNull(UUID userId);
 
+    // Finds plants that BELONG to the user and HAVE a deleted timestamp
+    List<Plant> findByUserUserIdAndDeletedAtIsNotNull(UUID userId);
+
     // Get single active plant by id
     Optional<Plant> findByPlantIdAndDeletedAtIsNull(UUID plantId);
 

@@ -3,6 +3,7 @@ package edu.cit.devibar.halaman.service;
 import edu.cit.devibar.halaman.dto.AuthResponse;
 import edu.cit.devibar.halaman.dto.PlantRequest;
 import edu.cit.devibar.halaman.dto.PlantResponse;
+import edu.cit.devibar.halaman.entity.CareSchedule;
 import edu.cit.devibar.halaman.entity.Plant;
 import edu.cit.devibar.halaman.entity.User;
 import edu.cit.devibar.halaman.repository.PlantRepository;
@@ -31,14 +32,17 @@ public class PlantService {
         this.plantDeletionFacade = plantDeletionFacade;
     }
 
-    // ==========================================
-    // GET ALL PLANTS
-    // ==========================================
     public AuthResponse getAllPlants(UUID userId) {
         List<PlantResponse> plants = plantRepository
                 .findByUserUserIdAndDeletedAtIsNull(userId)
                 .stream()
-                .map(PlantResponse::fromEntity)
+                // FIX: Map each plant by fetching its schedule date first
+                .map(plant -> {
+                    LocalDateTime dueDate = careScheduleService.getWateringScheduleForPlant(plant.getPlantId())
+                            .map(schedule -> schedule.getNextDueDate().atStartOfDay())
+                            .orElse(null);
+                    return PlantResponse.fromEntity(plant, dueDate);
+                })
                 .collect(Collectors.toList());
 
         AuthResponse.DataPayload payload = new AuthResponse.DataPayload();
@@ -46,9 +50,6 @@ public class PlantService {
         return AuthResponse.success(payload);
     }
 
-    // ==========================================
-    // GET SINGLE PLANT
-    // ==========================================
     public AuthResponse getPlant(UUID plantId, UUID userId) {
         var plant = plantRepository
                 .findByPlantIdAndDeletedAtIsNull(plantId)
@@ -74,9 +75,6 @@ public class PlantService {
         return AuthResponse.success(buildDataPayload(plant));
     }
 
-    // ==========================================
-    // CREATE PLANT
-    // ==========================================
     @Transactional
     public AuthResponse createPlant(PlantRequest request, UUID userId) {
         User user = userRepository.findById(userId).orElse(null);
@@ -112,9 +110,6 @@ public class PlantService {
         return AuthResponse.success(buildDataPayload(savedPlant));
     }
 
-    // ==========================================
-    // UPDATE PLANT
-    // ==========================================
     @Transactional
     public AuthResponse updatePlant(UUID plantId,
                                     PlantRequest request,
@@ -149,9 +144,6 @@ public class PlantService {
         return AuthResponse.success(buildDataPayload(plant));
     }
 
-    // ==========================================
-    // DELETE PLANT (Enhanced Soft Delete via Facade)
-    // ==========================================
     @Transactional
     public AuthResponse deletePlant(UUID plantId, UUID userId) {
         Plant plant = plantRepository
@@ -174,12 +166,69 @@ public class PlantService {
         return AuthResponse.success(null);
     }
 
-    // ==========================================
-    // PRIVATE HELPER
-    // ==========================================
-    private AuthResponse.DataPayload buildDataPayload(Plant plant) {
+    // 1. GET RECYCLE BIN
+    public AuthResponse getDeletedPlants(UUID userId) {
+        List<PlantResponse> trashedPlants = plantRepository
+                .findByUserUserIdAndDeletedAtIsNotNull(userId)
+                .stream()
+                // We pass null for the schedule date because trashed plants shouldn't have active schedules
+                .map(plant -> PlantResponse.fromEntity(plant, null))
+                .collect(Collectors.toList());
+
         AuthResponse.DataPayload payload = new AuthResponse.DataPayload();
-        payload.setPlant(PlantResponse.fromEntity(plant));
+        payload.setPlants(trashedPlants);
+        return AuthResponse.success(payload);
+    }
+
+    // 2. RESTORE PLANT
+    @Transactional
+    public AuthResponse restorePlant(UUID plantId, UUID userId) {
+        Plant plant = plantRepository.findById(plantId).orElse(null);
+
+        if (plant == null || plant.getDeletedAt() == null) {
+            return AuthResponse.error("DB-002", "Plant not found", "This plant does not exist in the recycle bin.");
+        }
+
+        if (!plant.getUser().getUserId().equals(userId)) {
+            return AuthResponse.error("AUTH-003", "Forbidden", "You do not have access to restore this plant.");
+        }
+
+        // Use the facade to restore schedules and images
+        plantDeletionFacade.executeRestore(plant);
+        plantRepository.save(plant);
+
+        return AuthResponse.success(null);
+    }
+
+    // 3. PERMANENT DELETE
+    @Transactional
+    public AuthResponse permanentlyDeletePlant(UUID plantId, UUID userId) {
+        Plant plant = plantRepository.findById(plantId).orElse(null);
+
+        if (plant == null || plant.getDeletedAt() == null) {
+            return AuthResponse.error("DB-002", "Plant not found", "This plant does not exist in the recycle bin.");
+        }
+
+        if (!plant.getUser().getUserId().equals(userId)) {
+            return AuthResponse.error("AUTH-003", "Forbidden", "You do not have access to delete this plant.");
+        }
+
+        // Use the facade to delete physical files from Cloudinary
+        plantDeletionFacade.executePermanentDelete(plant);
+
+        // Wipe the row from the database
+        plantRepository.delete(plant);
+
+        return AuthResponse.success(null);
+    }
+
+    private AuthResponse.DataPayload buildDataPayload(Plant plant) {
+        LocalDateTime dueDate = careScheduleService.getWateringScheduleForPlant(plant.getPlantId())
+                .map(schedule -> schedule.getNextDueDate().atStartOfDay())
+                .orElse(null);
+
+        AuthResponse.DataPayload payload = new AuthResponse.DataPayload();
+        payload.setPlant(PlantResponse.fromEntity(plant, dueDate));
         return payload;
     }
 }
