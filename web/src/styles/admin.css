@@ -1,0 +1,117 @@
+/* ==========================================
+   ADMIN LAYOUT STYLES
+   ========================================== */
+
+.admin-layout {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    background-color: #F9FAFB;
+    overflow: hidden;
+}
+
+/* --- Admin Sidebar --- */
+.admin-sidebar {
+    width: 260px;
+    background-color: #2E7D32; /* Deep forest green from your wireframes */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 20px;
+    box-sizing: border-box;
+}
+
+.admin-sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 48px;
+}
+
+.admin-sidebar-logo .logo-icon {
+    font-size: 24px;
+}
+
+.admin-sidebar-logo .logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-sidebar-logo .brand-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    line-height: 1;
+}
+
+.admin-sidebar-logo .brand-role {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #A7F3D0;
+    letter-spacing: 0.1em;
+}
+
+/* --- Navigation Links --- */
+.admin-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.admin-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    color: #D1FAE5;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.admin-nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.admin-nav-link.active {
+    background-color: #4ADE80; /* Brighter green for active state */
+    color: #064E3B;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* --- Bottom Logout --- */
+.admin-sidebar-bottom {
+    margin-top: auto;
+}
+
+.admin-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    background: none;
+    border: none;
+    color: #D1FAE5;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: all 0.2s;
+}
+
+.admin-logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* --- Main Content Area --- */
+.admin-main-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
