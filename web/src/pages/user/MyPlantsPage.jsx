@@ -133,7 +133,6 @@ export default function MyPlantsPage() {
   const handleEditSuccess = (updatedPlant) => updatePlantInState(updatedPlant);
   const handleDeleteSuccess = (deletedId) => removePlantFromState(deletedId);
 
-  console.log("Current user state:", user);
 
   return (
     <>

@@ -70,4 +70,53 @@ public class EmailService {
             throw new RuntimeException("Failed to send email");
         }
     }
+
+    @Async
+    public void sendDeletionWarningEmail(String toEmail, String firstName, String plantNickname, int daysRemaining) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setSubject("⚠️ Notice: '" + plantNickname + "' is scheduled for permanent deletion");
+
+            String htmlContent = String.format("""
+                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #fffaf5;">
+                    
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="color: #ea580c; margin: 0; font-size: 24px;">Halaman System Notice</h1>
+                    </div>
+                    
+                    <div style="background-color: #ffffff; padding: 25px; border-radius: 8px; border-left: 4px solid #f97316; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                        <h2 style="color: #1e293b; font-size: 18px; margin-top: 0;">Hello, %s!</h2>
+                        
+                        <p style="color: #475569; font-size: 16px; line-height: 1.6;">
+                            This is an automated system notification. We noticed that your plant, <strong>%s</strong>, has been in your Recycle Bin for a while.
+                        </p>
+                        
+                        <div style="text-align: center; margin: 25px 0; padding: 15px; background-color: #ffedd5; border-radius: 8px;">
+                            <span style="color: #c2410c; font-size: 18px; font-weight: bold;">
+                                Scheduled for permanent deletion in %d days.
+                            </span>
+                        </div>
+                        
+                        <p style="color: #475569; font-size: 15px;">
+                            If you meant to delete this plant, no further action is required. It will be securely wiped from our database. If this was a mistake, please log in and restore the plant from your Recycle Bin before the deadline.
+                        </p>
+                    </div>
+                    
+                    <p style="text-align: center; color: #94a3b8; font-size: 12px; margin-top: 30px;">
+                        This is an automated system notification. Please do not reply to this email.<br/>
+                        <strong>Halaman Data Lifecycle Management</strong>
+                    </p>
+                </div>
+                """, firstName, plantNickname, daysRemaining);
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            System.err.println("Failed to send deletion warning email: " + e.getMessage());
+        }
+    }
 }
