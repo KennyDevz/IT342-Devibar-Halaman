@@ -27,10 +27,10 @@ public class RecycleBinCleanupService {
      * This method runs automatically every day at 12:00 AM (Midnight)
      * Cron format: Seconds Minutes Hours DayOfMonth Month DayOfWeek
      */
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     @Transactional
     public void emptyOldRecycleBinItems() {
-        LocalDateTime threshold = LocalDateTime.now().minusMinutes(2);
+        LocalDateTime threshold = LocalDateTime.now().minusDays(30);
 
         // 🌟 1. Use the new JOIN FETCH method
         List<Plant> oldPlants = plantRepository.findOldPlantsWithImages(threshold);
@@ -45,7 +45,6 @@ public class RecycleBinCleanupService {
             }
             plantRepository.deleteAll(oldPlants);
 
-            System.out.println("🧹 Automated Cleanup: Deleted " + oldPlants.size() + " plants and wiped their images from Cloudinary.");
         }
     }
 
@@ -70,7 +69,5 @@ public class RecycleBinCleanupService {
                     5 // Days remaining
             );
         }
-
-        System.out.println("📧 Sent deletion warnings for " + plantsToWarn.size() + " plants.");
     }
 }
