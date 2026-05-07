@@ -234,18 +234,39 @@
   background: #E5E7EB;
 }
 
+
 .sort-dropdown {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #99A1AF;
+  gap: 6px;
   font-size: 0.85rem;
-  cursor: pointer;
+  white-space: nowrap;
 }
 
+
 .sort-dropdown span {
+  color: #6B7280;
+}
+
+
+.sort-dropdown select {
+  border: none;
+  background: transparent;
+  outline: none;
   font-weight: 600;
+  cursor: pointer;
+  appearance: none; 
+  padding-right: 18px; 
   color: #101828;
+  font-size: 0.85rem;
+}
+
+
+.sort-dropdown svg {
+  position: absolute;
+  right: 0;
+  pointer-events: none; 
 }
 
 /* ================================
@@ -263,7 +284,7 @@
   border-radius: 16px;
   border: 1px solid #F1F5F9;
   box-shadow: 0px 4px 20px rgba(0,0,0,0.05);
-  overflow: hidden;
+  position: relative;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -276,6 +297,8 @@
 .plant-card-image {
   position: relative;
   height: 224px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
   overflow: hidden;
   background: #F1F5F9;
 }
@@ -351,7 +374,7 @@
   background: #fff;
   border-radius: 10px;
   border: 1px solid #F3F4F6;
-  box-shadow: 0px 8px 24px rgba(0,0,0,0.12);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 140px;
   z-index: 10;
   overflow: hidden;

@@ -58,6 +58,7 @@
     color: #6A7282;
     border: 1px solid #E5E7EB;
     cursor: pointer;
+    position: relative;
 }
 
 .calendar-btn:hover {
@@ -170,12 +171,23 @@
 .task-icon {
     width: 3.5rem;
     height: 3.5rem;
-    background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+    background: linear-gradient(135deg, #E8F5E9, #C8E6C9); 
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
+    overflow: hidden; 
+}
+
+.task-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.task-icon span {
+    font-size: 20px;
 }
 
 .task-details {
@@ -248,4 +260,81 @@
     background-color: #FFF3E0;
     border-color: #FF9800;
     transform: scale(1.05);
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.schedule-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    border: 1px solid #E5E7EB;
+}
+
+.month-display {
+    font-weight: 600;
+    color: #101828;
+    min-width: 140px;
+    text-align: center;
+}
+
+.nav-btn {
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background: #F3F4F6;
+    color: #10B981;
+}
+
+/* Styling for when the Back button is disabled */
+.nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+    background: #F9FAFB; /* Prevents the green hover effect when disabled */
+    color: inherit;
+}
+
+/* The Green Dot Indicator */
+.task-indicator-dot {
+    position: absolute;
+    top: 6px;
+    right: 50%;
+    transform: translateX(50%); /* Centers it at the top */
+    width: 6px;
+    height: 6px;
+    background-color: #FF9800; /* Standard Halaman Green */
+    border-radius: 50%;
+}
+
+/* --- TODAY INDICATOR --- */
+/* Highlights the current calendar day so the user never gets lost */
+.calendar-btn.is-today:not(.selected) .calendar-day-label,
+.calendar-btn.is-today:not(.selected) .calendar-date-label {
+    color: #10B981; /* Halaman Brand Green */
+    font-weight: 800; /* Makes it slightly bolder than the rest */
+}
+
+/* Add a subtle border to 'Today' for extra clarity */
+.calendar-btn.is-today:not(.selected) {
+    border: 2px solid #137e47; 
+    background-color: #F8FAFC; 
 }

@@ -11,6 +11,7 @@ import edu.cit.devibar.halaman.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -111,36 +112,43 @@ public class PlantService {
     }
 
     @Transactional
-    public AuthResponse updatePlant(UUID plantId,
-                                    PlantRequest request,
-                                    UUID userId) {
+    public AuthResponse updatePlant(UUID plantId, PlantRequest request, UUID userId) {
         Plant plant = plantRepository
                 .findByPlantIdAndDeletedAtIsNull(plantId)
                 .orElse(null);
 
         if (plant == null) {
-            return AuthResponse.error(
-                    "DB-001",
-                    "Plant not found",
-                    "No plant found with this ID"
-            );
+            return AuthResponse.error("DB-001", "Plant not found", "No plant found with this ID");
         }
 
-        // Make sure plant belongs to this user
         if (!plant.getUser().getUserId().equals(userId)) {
-            return AuthResponse.error(
-                    "AUTH-003",
-                    "Forbidden",
-                    "You do not have access to this plant"
-            );
+            return AuthResponse.error("AUTH-003", "Forbidden", "You do not have access to this plant");
         }
+
+        // 1. Check if the frequency changed
+        boolean frequencyChanged = !plant.getWateringFrequencyDays().equals(request.getWateringFrequencyDays());
 
         plant.setNickname(request.getNickname());
         plant.setSpeciesName(request.getSpeciesName());
         plant.setWateringFrequencyDays(request.getWateringFrequencyDays());
 
-        plantRepository.save(plant);
+        // 2. Update the connected Care Schedule!
+        if (frequencyChanged) {
+            for (CareSchedule schedule : plant.getCareSchedules()) {
+                // Find the active WATERING schedule
+                if ("WATERING".equalsIgnoreCase(schedule.getTaskType()) && schedule.getDeletedAt() == null) {
 
+                    // Sync the new frequency number to the schedule table
+                    schedule.setFrequencyDays(request.getWateringFrequencyDays());
+
+                    // Recalculate the next due date starting from today
+                    schedule.setNextDueDate(LocalDate.now().plusDays(request.getWateringFrequencyDays()));
+                    break;
+                }
+            }
+        }
+
+        plantRepository.save(plant);
         return AuthResponse.success(buildDataPayload(plant));
     }
 
@@ -171,7 +179,6 @@ public class PlantService {
         List<PlantResponse> trashedPlants = plantRepository
                 .findByUserUserIdAndDeletedAtIsNotNull(userId)
                 .stream()
-                // We pass null for the schedule date because trashed plants shouldn't have active schedules
                 .map(plant -> PlantResponse.fromEntity(plant, null))
                 .collect(Collectors.toList());
 

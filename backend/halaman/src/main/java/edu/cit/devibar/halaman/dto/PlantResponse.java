@@ -12,6 +12,7 @@ public class PlantResponse {
     private final Integer wateringFrequencyDays;
     private final LocalDateTime createdAt;
     private final LocalDateTime nextDueDate;
+    private final String imageUrl;
 
     // Private constructor forces the use of the Builder
     private PlantResponse(Builder builder) {
@@ -21,6 +22,7 @@ public class PlantResponse {
         this.wateringFrequencyDays = builder.wateringFrequencyDays;
         this.createdAt = builder.createdAt;
         this.nextDueDate = builder.nextDueDate;
+        this.imageUrl = builder.imageUrl;
     }
 
     // Getters only - No setters! The object is now strictly immutable.
@@ -30,6 +32,7 @@ public class PlantResponse {
     public Integer getWateringFrequencyDays(){ return wateringFrequencyDays; }
     public LocalDateTime getCreatedAt(){ return createdAt; }
     public LocalDateTime getNextDueDate(){ return nextDueDate; }
+    public String getImageUrl(){ return imageUrl; }
 
     // The Builder static class
     public static class Builder {
@@ -39,6 +42,7 @@ public class PlantResponse {
         private Integer wateringFrequencyDays;
         private LocalDateTime createdAt;
         private LocalDateTime nextDueDate;
+        private String imageUrl;
 
         public Builder plantId(UUID plantId) { this.plantId = plantId; return this; }
         public Builder nickname(String nickname) { this.nickname = nickname; return this; }
@@ -46,6 +50,7 @@ public class PlantResponse {
         public Builder wateringFrequencyDays(Integer days) { this.wateringFrequencyDays = days; return this; }
         public Builder createdAt(LocalDateTime createdAt) { this.createdAt = createdAt; return this; }
         public Builder nextDueDate(LocalDateTime nextDueDate) { this.nextDueDate = nextDueDate; return this; }
+        public Builder imageUrl(String imageUrl) { this.imageUrl = imageUrl; return this; }
 
         public PlantResponse build() {
             return new PlantResponse(this);
@@ -54,6 +59,12 @@ public class PlantResponse {
 
     // Updated fromEntity mapping method using the Builder
     public static PlantResponse fromEntity(Plant plant, LocalDateTime scheduleDueDate) {
+
+        String extractedImageUrl = null;
+        if (plant.getImages() != null && !plant.getImages().isEmpty()) {
+            extractedImageUrl = plant.getImages().get(0).getFileUrl();
+        }
+
         return new Builder()
                 .plantId(plant.getPlantId())
                 .nickname(plant.getNickname())
@@ -61,6 +72,7 @@ public class PlantResponse {
                 .wateringFrequencyDays(plant.getWateringFrequencyDays())
                 .createdAt(plant.getCreatedAt())
                 .nextDueDate(scheduleDueDate)
+                .imageUrl(extractedImageUrl)
                 .build();
     }
 }
