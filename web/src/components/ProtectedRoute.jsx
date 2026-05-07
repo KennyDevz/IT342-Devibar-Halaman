@@ -5,13 +5,18 @@ import { useAuth } from '../context/AuthContext';
 export default function ProtectedRoute({ children }) {
     const { user, loading } = useAuth();
 
-    if (loading) return <div>Loading...</div>;
+    const hasToken = !!localStorage.getItem('accessToken');
 
-    if (!user) {
-        return <Navigate to="/login" />;
+    if (loading) {
+        return <div>Loading...</div>;
     }
-    if (user.role?.toUpperCase() === 'ADMIN') {
-        return <Navigate to="/admin/overview" />;
+
+    if (!user && !hasToken) {
+        return <Navigate to="/login" replace />;
+    }
+
+    if (user?.role?.toUpperCase() === 'ADMIN') {
+        return <Navigate to="/admin/overview" replace />;
     }
 
     return children;

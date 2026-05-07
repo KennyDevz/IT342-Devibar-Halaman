@@ -35,3 +35,11 @@ spring.servlet.multipart.max-request-size=10MB
 cloudinary.cloud-name=CLOUDINARY_NAME
 cloudinary.api-key=CLOUDINARY_API_KEY
 cloudinary.api-secret=CLOUDINARY_API_SECRET
+
+# SMTP EMAIL CONFIGURATION
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=your--email@gmail.com
+spring.mail.password=your_16_digit_app_password
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true

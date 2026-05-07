@@ -54,6 +54,15 @@ public class User implements UserDetails {
         USER, ADMIN
     }
 
+    @Column(name = "is_verified", nullable = false)
+    private Boolean isVerified = false;
+
+    @Column(name = "otp_code", length = 6)
+    private String otpCode;
+
+    @Column(name = "otp_expiry")
+    private LocalDateTime otpExpiry;
+
     // --- UserDetails ---
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -79,6 +88,9 @@ public class User implements UserDetails {
     public Role getRole()              { return role; }
     public LocalDateTime getCreatedAt(){ return createdAt; }
     public String getStatus() { return status; }
+    public Boolean getIsVerified() { return isVerified; }
+    public String getOtpCode() { return otpCode; }
+    public LocalDateTime getOtpExpiry() { return otpExpiry; }
 
     // --- Setters ---
     public void setUserId(UUID userId)             { this.userId = userId; }
@@ -89,5 +101,8 @@ public class User implements UserDetails {
     public void setLastName(String lastName)       { this.lastName = lastName; }
     public void setRole(Role role)                 { this.role = role; }
     public void setStatus(String status) { this.status = status; }
+    public void setIsVerified(Boolean isVerified) { this.isVerified = isVerified; }
+    public void setOtpCode(String otpCode) { this.otpCode = otpCode; }
+    public void setOtpExpiry(LocalDateTime otpExpiry) { this.otpExpiry = otpExpiry; }
 
 }

@@ -41,7 +41,7 @@ public class AdminService {
         metrics.put("totalUsers", userRepository.count());
         metrics.put("totalPlants", plantRepository.count());
         metrics.put("totalImages", imageRepository.count());
-        metrics.put("activeUsers", userRepository.count());
+        metrics.put("activeUsers", userRepository.countByStatus("ACTIVE"));
         return metrics;
     }
 

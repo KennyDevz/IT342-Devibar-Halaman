@@ -70,16 +70,27 @@ public class GoogleAuthStrategy implements AuthStrategy {
                 user.setFirstName(firstName != null ? firstName : "");
                 user.setLastName(lastName != null ? lastName : "");
                 user.setGoogleId(googleId);
-                user.setPasswordHash(""); // OAuth users don't have a local password
+                user.setPasswordHash("");
                 user.setRole(User.Role.USER);
+                user.setIsVerified(true);
                 return userRepository.save(user);
             } else {
-                // Existing user — update google_id if it's their first time using Google
+                boolean needsUpdate = false;
+
+                // Update google_id if it's their first time using Google
                 if (user.getGoogleId() == null) {
                     user.setGoogleId(googleId);
-                    return userRepository.save(user);
+                    needsUpdate = true;
                 }
-                return user;
+
+                //If an existing email/password user logs in via Google,
+                // we trust Google and verify their account automatically.
+                if (!user.getIsVerified()) {
+                    user.setIsVerified(true);
+                    needsUpdate = true;
+                }
+
+                return needsUpdate ? userRepository.save(user) : user;
             }
 
         } catch (Exception e) {

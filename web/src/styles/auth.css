@@ -374,3 +374,59 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   cursor: pointer;
   line-height: 1.5;
 }
+
+/* =========================================
+   OTP Verification Specific Styles
+   ========================================= */
+
+/* Success state for the banner (overrides the red error banner colors) */
+.auth-success-banner {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+/* Make the OTP input look like a code block */
+.auth-input-otp {
+  letter-spacing: 0.25em;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* Container for the countdown text at the bottom */
+.auth-resend-container {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* The ticking timer text */
+.auth-resend-timer {
+  font-weight: 500;
+}
+
+/* The clickable 'Resend now' text button */
+.auth-resend-btn {
+  background: none;
+  border: none;
+  color: #16a34a;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.auth-resend-btn:hover:not(:disabled) {
+  color: #15803d;
+  text-decoration: underline;
+}
+
+.auth-resend-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

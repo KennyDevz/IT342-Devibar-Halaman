@@ -15,6 +15,7 @@ import AdminOverviewPage from './pages/admin/AdminOverviewPage';
 import AdminUsersPage from './pages/admin/UserManagementPage';
 import ImageModerationPage from './pages/admin/ImageModerationPage';
 import { PlantProvider } from './context/PlantContext';
+import VerifyOtpPage from './pages/VerifyOtpPage';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify" element={<VerifyOtpPage />} />
             
             {/* Protect and Wrap My Plants Page */}
             <Route path="/plants" element={

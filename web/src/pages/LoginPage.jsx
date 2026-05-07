@@ -30,13 +30,7 @@ export default function LoginPage() {
       const res = await loginUser(form);
       if (res.data.success) {
         const userRole = res.data.data.user?.role?.toUpperCase() || 'USER';
-        login(
-          {
-            accessToken:  res.data.data.accessToken,
-            refreshToken: res.data.data.refreshToken,
-          },
-          res.data.data.user
-        );
+        login(res.data.data);
         if (userRole === 'ADMIN') {
             navigate('/admin/overview', { state: { toast: 'Admin login successful! 👑' } });
         } else {
@@ -65,13 +59,7 @@ export default function LoginPage() {
         const res = await googleAuth(tokenResponse.access_token);
         if (res.data.success) {
           const userRole = res.data.data.user?.role?.toUpperCase() || 'USER';
-          login(
-            {
-              accessToken:  res.data.data.accessToken,
-              refreshToken: res.data.data.refreshToken,
-            },
-            res.data.data.user
-          );
+          login(res.data.data);
           if (userRole === 'ADMIN') {
               navigate('/admin/overview', { state: { toast: 'Admin login successful! 👑' } });
           } else {
@@ -170,10 +158,6 @@ export default function LoginPage() {
             </div>
 
             <div className="auth-options">
-              <label className="auth-remember">
-                <input type="checkbox" />
-                <span>Remember me</span>
-              </label>
               <Link to="/forgot-password" className="auth-forgot">
                 Forgot password?
               </Link>
@@ -187,7 +171,7 @@ export default function LoginPage() {
             </button>
 
             <div className="auth-divider">
-              <span>Or continue with</span>
+              <span>Or</span>
             </div>
 
             <button type="button" className="auth-google-btn" onClick={() => handleGoogleLogin()} disabled={loading} style={{ opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
@@ -198,7 +182,7 @@ export default function LoginPage() {
                 height={20}
                 style={{ filter: loading ? 'grayscale(100%)' : 'none' }}
               />
-              {loading ? 'Please wait...' : 'Sign in with Google'}
+              {loading ? 'Please wait...' : 'Continue with Google'}
             </button>
 
           </form>

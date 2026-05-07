@@ -10,6 +10,7 @@ import { googleAuth } from '../api/authApi';
 
 export default function RegisterPage() {
   const navigate  = useNavigate();
+  const { login } = useAuth();
 
   const [form, setForm] = useState({
     firstName: '',
@@ -56,7 +57,7 @@ export default function RegisterPage() {
         password:  form.password,
       });
       if (res.data.success) {
-        navigate('/login', { state: { toast: 'Account created successfully! Please log in.' } });
+        navigate('/verify', { state: { email: form.email } });
       } else {
         setApiError(res.data.error?.message || 'Registration failed');
       }
@@ -72,7 +73,10 @@ export default function RegisterPage() {
     try {
       const res = await googleAuth(tokenResponse.access_token);
       if (res.data.success) {
-        navigate('/login', { state: { toast: 'Account created successfully! Please log in.' } });
+        login(res.data.data); 
+        setTimeout(() => {
+            navigate('/plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
+          }, 100);
       } else {
         setApiError(res.data.error?.message || 'Google sign up failed');
       }
@@ -234,6 +238,10 @@ export default function RegisterPage() {
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
 
+            <div className="auth-divider">
+              <span>Or</span>
+            </div>
+
             <button type="button" className="auth-google-btn" onClick={() => handleGoogleLogin()}>
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -241,7 +249,7 @@ export default function RegisterPage() {
                 width={20}
                 height={20}
               />
-              Sign up with Google
+              Continue with Google
             </button>
 
           </form>

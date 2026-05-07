@@ -12,6 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import edu.cit.devibar.halaman.dto.GoogleAuthRequest;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -68,5 +70,22 @@ public class AuthController {
         dataPayload.setUser(userDto);
 
         return ResponseEntity.ok(AuthResponse.success(dataPayload));
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<AuthResponse> verifyOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otpCode = request.get("otpCode");
+
+        AuthResponse response = authService.verifyOtp(email, otpCode);
+
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @PostMapping("/resend-otp")
+    public ResponseEntity<?> resendOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        return ResponseEntity.ok(authService.resendOtp(email));
     }
 }

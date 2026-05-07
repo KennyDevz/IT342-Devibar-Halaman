@@ -19,11 +19,13 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const login = (tokens, userData) => {
-    localStorage.setItem('accessToken', tokens.accessToken);
-    localStorage.setItem('refreshToken', tokens.refreshToken);
-    setUser(userData);
-  };
+  const login = (data) => {
+  const { user, accessToken, refreshToken } = data;
+  
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+  setUser(user);
+};
 
   const logout = () => {
     localStorage.removeItem('accessToken');
