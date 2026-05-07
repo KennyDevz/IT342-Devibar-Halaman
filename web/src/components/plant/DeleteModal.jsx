@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { deletePlant } from '../api/plantApi';
+import { deletePlant } from '../../api/plantApi';
 
 export default function DeleteModal({ plant, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);

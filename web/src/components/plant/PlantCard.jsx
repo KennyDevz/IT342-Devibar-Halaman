@@ -1,15 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react'; // 🌟 NEW: Imported useRef
 import { MoreVertical, Pencil, Trash2, Droplets, Thermometer } from 'lucide-react';
-import { usePlants } from '../context/PlantContext';
+import { usePlants } from '../../context/PlantContext';
 
 export default function PlantCard({ plant, onEdit, onDelete }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null); 
   const { images, loadPlantImage } = usePlants();
   const imageUrl = images[plant.plantId];
 
   useEffect(() => {
     loadPlantImage(plant.plantId);
   }, [plant.plantId, loadPlantImage]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // If the click is outside the menuRef container, close the menu
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    };
+    // Only add the event listener if the menu is actually open
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    // Cleanup the listener
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   const getStatus = () => {
     if (!plant.nextDueDate) return 'watered'; 
@@ -62,7 +80,8 @@ export default function PlantCard({ plant, onEdit, onDelete }) {
         </div>
 
         {/* Three dots menu */}
-        <div className="plant-card-menu">
+        {/* 🌟 NEW 3: Attach the ref to the menu container */}
+        <div className="plant-card-menu" ref={menuRef}> 
           <button
             className="plant-menu-btn"
             onClick={(e) => {

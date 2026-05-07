@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X } from 'lucide-react';
-import { updatePlant } from '../api/plantApi';
+import { updatePlant } from '../../api/plantApi';
 
 export default function EditPlantModal({ plant, onClose, onSuccess }) {
   const [form, setForm] = useState({

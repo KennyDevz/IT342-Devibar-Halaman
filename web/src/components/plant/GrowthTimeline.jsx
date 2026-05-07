@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getPlantImageHistory } from '../api/plantApi';
+import { getPlantImageHistory } from '../../api/plantApi';
 import { Upload } from 'lucide-react';
 import UploadMilestoneModal from './UploadMilestoneModal';
-import '../styles/gallery.css';
+import '../../styles/gallery.css';
 
 export default function GrowthTimeline({ plantId }) {
     const [history, setHistory] = useState([]);

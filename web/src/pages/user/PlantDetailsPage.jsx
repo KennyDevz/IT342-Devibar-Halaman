@@ -1,14 +1,13 @@
 import { ArrowLeft, Droplets, Calendar, Plus, Scissors, Sparkles, RefreshCw, Archive } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { getPlantMaintenanceLogs } from '../api/plantApi';
-import LogCareModal from '../components/LogCareModal';
-import { usePlants } from '../context/PlantContext'; 
+import { getPlantMaintenanceLogs } from '../../api/plantApi';
+import LogCareModal from '../../components/plant/LogCareModal';
+import { usePlants } from '../../context/PlantContext'; 
 
 export default function PlantDetailsPage({ plant, onBack }) {
   const { fetchPlants, images, loadPlantImage } = usePlants(); 
   
   const imageUrl = images[plant.plantId];
-  // Removed the schedule state entirely! We will use plant.nextDueDate
   const [logs, setLogs] = useState([]); 
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -52,6 +51,28 @@ export default function PlantDetailsPage({ plant, onBack }) {
     if (diffDays < 0) return "Overdue";
     if (diffDays === 0) return "Today";
     return `In ${diffDays} Days`;
+  };
+
+  const calculatePlantAge = (createdAt) => {
+    if (!createdAt) return "Unknown age";
+    
+    const startDate = new Date(createdAt);
+    const today = new Date();
+    
+    // Calculate the difference in time
+    const diffTime = Math.abs(today - startDate);
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return "Added today";
+    if (diffDays === 1) return "1 day old";
+    if (diffDays < 30) return `${diffDays} days old`;
+    
+    const diffMonths = Math.floor(diffDays / 30);
+    if (diffMonths === 1) return "1 month old";
+    if (diffMonths < 12) return `${diffMonths} months old`;
+    
+    const diffYears = Math.floor(diffDays / 365);
+    return diffYears === 1 ? "1 year old" : `${diffYears} years old`;
   };
 
   const formatLogDate = (dateString) => {
@@ -118,7 +139,7 @@ export default function PlantDetailsPage({ plant, onBack }) {
         <div className="stat-card">
           <div className="stat-icon age"><Calendar size={24} /></div>
           <div className="stat-label">Age</div>
-          <div className="stat-value">New Plant</div>
+          <div className="stat-value">{calculatePlantAge(plant.createdAt)}</div>
         </div>
       </div>
 

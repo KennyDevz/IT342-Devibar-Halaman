@@ -1,19 +1,25 @@
 import React from 'react';
+import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Leaf, Calendar, Image, Trash2, Settings, LogOut } from 'lucide-react';
+import LogoutModal from './LogoutModal';
 import '../styles/sidebar.css'; 
 
 export default function Sidebar() {
     const navigate = useNavigate();
     const { logout } = useAuth();
 
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
     const handleLogout = () => {
+        setIsLogoutModalOpen(false);
         logout();
         navigate('/login');
     };
 
     return (
+        <>
         <aside className="sidebar">
             <div className="sidebar-logo">
                 <span className="sidebar-logo-icon">🌿</span>
@@ -41,11 +47,17 @@ export default function Sidebar() {
                 <NavLink to="/settings" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
                     <Settings size={18} /> Settings
                 </NavLink>
-                <button className="sidebar-logout" onClick={handleLogout}>
+                <button className="sidebar-logout" onClick={() => setIsLogoutModalOpen(true)}>
                     <LogOut size={18} /> Logout
                 </button>
             </div>
         </aside>
+        <LogoutModal 
+                isOpen={isLogoutModalOpen}
+                onClose={() => setIsLogoutModalOpen(false)}
+                onConfirm={handleLogout}
+        />
+        </> 
     );
 };
 

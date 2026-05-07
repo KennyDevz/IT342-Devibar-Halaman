@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trash2, RefreshCcw, AlertTriangle } from 'lucide-react';
-import '../styles/recyclebin.css'; // Uses the exact same CSS we just wrote
+import '../../styles/recyclebin.css'; // Uses the exact same CSS we just wrote
 
 export default function RecycleBinModal({ 
     modalConfig, 

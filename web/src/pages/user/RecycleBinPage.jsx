@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trash2 } from 'lucide-react';
-import { getRecycledPlants, restorePlant, permanentlyDeletePlant } from '../api/plantApi';
-import RecycleBinModal from '../components/RecycleBinModal'; // New Component
-import '../styles/recyclebin.css';
+import { getRecycledPlants, restorePlant, permanentlyDeletePlant } from '../../api/plantApi';
+import RecycleBinModal from '../../components/plant/RecycleBinModal'; 
+import '../../styles/recyclebin.css';
 
 export default function RecycleBinPage() {
     const [deletedPlants, setDeletedPlants] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isProcessing, setIsProcessing] = useState(false);
     
-    // Controlled state for the Modal component
     const [modalConfig, setModalConfig] = useState({ 
         isOpen: false, 
         type: null, 
@@ -23,7 +22,6 @@ export default function RecycleBinPage() {
         setLoading(true);
         try {
             const response = await getRecycledPlants();
-            // Maps the response to the plants list
             setDeletedPlants(response.data.data.plants || []);
         } catch (error) {
             console.error("Failed to load recycle bin", error);
@@ -36,7 +34,6 @@ export default function RecycleBinPage() {
         fetchTrash();
     }, []);
 
-    // --- Helper for Mockup UI ---
     const getDaysAgo = (deletedAtString) => {
         if (!deletedAtString) return "Deleted recently";
         const deletedDate = new Date(deletedAtString);
@@ -45,7 +42,6 @@ export default function RecycleBinPage() {
         return diffDays === 0 ? "Deleted today" : `Deleted ${diffDays} days ago`;
     };
 
-    // --- Modal Handlers ---
     const openModal = (type, plant = null) => {
         setModalConfig({ isOpen: true, type, plant });
     };
@@ -54,7 +50,6 @@ export default function RecycleBinPage() {
         setModalConfig({ isOpen: false, type: null, plant: null });
     };
 
-    // --- Logic Execution ---
     const handleConfirmAction = async () => {
         setIsProcessing(true);
         const { type, plant } = modalConfig;
@@ -70,7 +65,6 @@ export default function RecycleBinPage() {
                 await Promise.all(deletedPlants.map(p => permanentlyDeletePlant(p.plantId)));
             }
             
-            // Refresh list after any successful action
             await fetchTrash();
         } catch (error) {
             alert("The action could not be completed. Please try again.");
@@ -86,7 +80,6 @@ export default function RecycleBinPage() {
         <div className="rb-page-wrapper">
             <div className="rb-container">
                 
-                {/* Header Section */}
                 <div className="rb-top-bar">
                     <button className="btn-back" onClick={() => navigate(-1)}>
                         <ArrowLeft size={16} /> Back
@@ -117,7 +110,6 @@ export default function RecycleBinPage() {
                     </div>
                 </div>
 
-                {/* List Container */}
                 <div className="rb-list-wrapper">
                     {deletedPlants.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '60px 0', color: '#9CA3AF' }}>
@@ -128,11 +120,23 @@ export default function RecycleBinPage() {
                         deletedPlants.map(plant => (
                             <div key={plant.plantId} className="rb-list-item">
                                 <div className="rb-item-left">
-                                    <img 
-                                        src="https://via.placeholder.com/72/E5E7EB/9CA3AF?text=Leaf" 
-                                        alt={plant.nickname} 
-                                        className="rb-item-image"
-                                    />
+                                    
+                                    {plant.imageUrl ? (
+                                        <img 
+                                            src={plant.imageUrl} 
+                                            alt={plant.nickname} 
+                                            className="rb-item-image"
+                                            style={{ objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        <div 
+                                            className="rb-item-image" 
+                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#E5E7EB', fontSize: '24px' }}
+                                        >
+                                            🌿
+                                        </div>
+                                    )}
+
                                     <div className="rb-item-info">
                                         <h3>{plant.nickname}</h3>
                                         <p className="species">{plant.speciesName}</p>
@@ -160,7 +164,6 @@ export default function RecycleBinPage() {
                 </div>
             </div>
 
-            {/* Reusable Modal Component */}
             <RecycleBinModal 
                 modalConfig={modalConfig}
                 isProcessing={isProcessing}

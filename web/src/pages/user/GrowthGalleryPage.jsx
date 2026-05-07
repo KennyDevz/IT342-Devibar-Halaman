@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { usePlants } from '../context/PlantContext';
+import { usePlants } from '../../context/PlantContext';
 import { ArrowLeft } from 'lucide-react';
-import GrowthTimeline from '../components/GrowthTimeline';
-import '../styles/gallery.css';
-import '../styles/plant.css'; 
+import GrowthTimeline from '../../components/plant/GrowthTimeline';
+import '../../styles/gallery.css';
+import '../../styles/plant.css'; 
 
 export default function GrowthGalleryPage() {
     const { plants, images, loading } = usePlants();

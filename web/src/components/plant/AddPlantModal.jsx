@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { X, Plus, UploadCloud } from 'lucide-react';
-import { createPlant, uploadPlantImage } from '../api/plantApi';
+import { createPlant, uploadPlantImage } from '../../api/plantApi';
 
 export default function AddPlantModal({ onClose, onSuccess }) {
   const fileInputRef = useRef(null);

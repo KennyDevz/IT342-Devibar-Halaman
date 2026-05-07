@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
-import { uploadMilestoneImage } from '../api/plantApi';
-import '../styles/gallery.css';
+import { uploadMilestoneImage } from '../../api/plantApi';
+import '../../styles/gallery.css';
 
 export default function UploadMilestoneModal({ isOpen, onClose, plantId, onUploadSuccess }) {
     const [selectedFile, setSelectedFile] = useState(null);

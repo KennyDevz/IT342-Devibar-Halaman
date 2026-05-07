@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { usePlants } from '../context/PlantContext';
-import Toast from '../components/Toast';
+import { useAuth } from '../../context/AuthContext';
+import { usePlants } from '../../context/PlantContext';
+import Toast from '../../components/Toast';
 import { Plus, Search, ChevronDown, Bell } from 'lucide-react';
-import PlantCard from '../components/PlantCard';
-import AddPlantModal from '../components/AddPlantModal';
-import EditPlantModal from '../components/EditPlantModal';
-import DeleteModal from '../components/DeleteModal';
+import PlantCard from '../../components/plant/PlantCard';
+import AddPlantModal from '../../components/plant/AddPlantModal';
+import EditPlantModal from '../../components/plant/EditPlantModal';
+import DeleteModal from '../../components/plant/DeleteModal';
 import PlantDetailsPage from './PlantDetailsPage';
-import { getCurrentWeather } from '../api/plantApi';
-import '../styles/plant.css';
+import { getCurrentWeather } from '../../api/plantApi';
+import '../../styles/plant.css';
 
 export default function MyPlantsPage() {
   const { user } = useAuth();
@@ -24,8 +24,9 @@ export default function MyPlantsPage() {
   const [selectedPlant, setSelectedPlant] = useState(null); 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
+  const [sortBy, setSortBy] = useState('name-asc');
 
-  const [weather, setWeather] = useState({ temp: '--', humidity: '--', isDay: true, code: 0 });
+  const [weather, setWeather] = useState({ temp: '--', humidity: '--', isDay: true, code: 0, location: 'Loading...'});
   
   // --- MODAL STATE ---
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -59,10 +60,9 @@ export default function MyPlantsPage() {
         // 2. If we have data, and it is less than 30 minutes (1,800,000 ms) old, use it instantly!
         if (cachedWeather && cachedTime && (Date.now() - cachedTime < 1800000)) {
             setWeather(JSON.parse(cachedWeather));
-            return; // Exit the function early, skipping the API call
+            return; 
         }
 
-        // 3. If no valid cache exists, fetch fresh data from the backend
         try {
             const res = await getCurrentWeather();
             if (res.data) {
@@ -70,9 +70,10 @@ export default function MyPlantsPage() {
                     temp: res.data.temperature, 
                     humidity: res.data.humidity,
                     isDay: res.data.isDay,
-                    code: res.data.weatherCode 
+                    code: res.data.weatherCode,
+                    location: res.data.location || 'Did not work'
                 };
-                
+
                 setWeather(freshWeatherData);
 
                 // 4. Save the fresh data and the exact timestamp to sessionStorage
@@ -114,6 +115,19 @@ export default function MyPlantsPage() {
     return matchesSearch && getPlantStatus(plant) === activeFilter;
   });
 
+  const sortedPlants = [...filteredPlants].sort((a, b) => {
+    if (sortBy === 'name-asc') {
+      return a.nickname.localeCompare(b.nickname);
+    } else if (sortBy === 'name-desc') {
+      return b.nickname.localeCompare(a.nickname);
+    } else if (sortBy === 'date-desc') {
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    } else if (sortBy === 'date-asc') {
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    }
+    return 0;
+  });
+
   // Automatically update the global state when modals finish their actions
   const handleAddSuccess = (newPlant) => addPlantToState(newPlant);
   const handleEditSuccess = (updatedPlant) => updatePlantInState(updatedPlant);
@@ -147,7 +161,7 @@ export default function MyPlantsPage() {
               <div className="weather-widget">
                   <span className="weather-icon">{getWeatherIcon(weather.code, weather.isDay)}</span>
                   <div className="weather-info">
-                      <span className="weather-location">Cebu City, PH</span>
+                      <span className="weather-location">{weather.location}</span>
                       <span className="weather-temp">{weather.temp}°C</span>
                       <span className="weather-desc">{weather.humidity}% Humidity</span>
                   </div>
@@ -162,7 +176,6 @@ export default function MyPlantsPage() {
             </div>
             
             <div className="catalog-header-actions">
-              <button className="btn-select">Select Plants</button>
               <button className="btn-add-plant" onClick={() => setIsAddOpen(true)}>
                 <Plus size={18} /> Add New Plant
               </button>
@@ -198,9 +211,19 @@ export default function MyPlantsPage() {
               
               <div className="vertical-divider"></div>
               
-              <div className="sort-dropdown">
-                Sort by: <span>Name</span>
-                <ChevronDown size={16} color="#101828" />
+              <div className="sort-dropdown" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                Sort by: 
+                <select 
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', fontWeight: '600', cursor: 'pointer', appearance: 'none', paddingRight: '16px', color: '#101828' }}
+                >
+                  <option value="name-asc">Name (A-Z)</option>
+                  <option value="name-desc">Name (Z-A)</option>
+                  <option value="date-desc">Newest First</option>
+                  <option value="date-asc">Oldest First</option>
+                </select>
+                <ChevronDown size={16} color="#101828" style={{ position: 'absolute', right: 0, pointerEvents: 'none' }} />
               </div>
             </div>
           </div>
@@ -209,9 +232,9 @@ export default function MyPlantsPage() {
             <div className="catalog-empty">
               <p>Loading your green space...</p>
             </div>
-          ) : filteredPlants.length > 0 ? (
+          ) : sortedPlants.length > 0 ? (
             <div className="plant-grid">
-              {filteredPlants.map(plant => (
+              {sortedPlants.map(plant => (
                 <div 
                   key={plant.plantId} 
                   onClick={() => setSelectedPlant(plant)} 

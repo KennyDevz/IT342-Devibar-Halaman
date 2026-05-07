@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { X, Droplets, Calendar, FileText, ChevronDown } from 'lucide-react';
-import {logMaintenance } from '../api/plantApi';
+import {logMaintenance } from '../../api/plantApi';
 
-export default function LogCareModal({ plant, onClose, onSuccess }) {
-  const [taskType, setTaskType] = useState('WATERING');
+export default function LogCareModal({ plant, onClose, onSuccess,defaultTask = 'WATERING', lockTask = false }) {
+  const [taskType, setTaskType] = useState(defaultTask);
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -57,13 +57,15 @@ export default function LogCareModal({ plant, onClose, onSuccess }) {
                 className="care-select" 
                 value={taskType}
                 onChange={(e) => setTaskType(e.target.value)}
+                disabled={lockTask}
+                style={lockTask ? { backgroundColor: '#f3f4f6', cursor: 'not-allowed', color: '#6B7280' } : {}}
               >
                 <option value="WATERING">Watering</option>
                 <option value="FERTILIZING">Fertilizing</option>
                 <option value="PRUNING">Pruning</option>
                 <option value="REPOTTING">Repotting</option>
               </select>
-              <div className="care-dropdown-icon"><ChevronDown size={16} /></div>
+              {!lockTask && <div className="care-dropdown-icon"><ChevronDown size={16} /></div>}
             </div>
           </div>
 
