@@ -17,9 +17,9 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
-    // Matches your SDD requirement: GET /weather/current (prefixed with /api)
     @GetMapping("/current")
-    public ResponseEntity<WeatherResponse> getCurrentWeather() {
-        return ResponseEntity.ok(weatherService.getCurrentWeather());
+    public ResponseEntity<WeatherResponse> getWeather() {
+        WeatherResponse response = weatherService.getCurrentWeather("Cebu City");
+        return ResponseEntity.ok(response);
     }
 }
