@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.authentication.BadCredentialsException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -29,15 +30,17 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final List<AuthStrategy> strategies;
+    private final AuditService auditService;
 
     public AuthService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
-                       AuthenticationManager authenticationManager, List<AuthStrategy> strategies) {
+                       AuthenticationManager authenticationManager, List<AuthStrategy> strategies, AuditService auditService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.strategies = strategies;
+        this.auditService = auditService;
         ;
     }
 
@@ -47,14 +50,27 @@ public class AuthService {
             AuthStrategy strategy = strategies.stream()
                     .filter(s -> s.supports(provider))
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Unknown provider"));
+                    .orElseThrow(() -> new IllegalArgumentException("Unknown provider"));
 
             User user = strategy.authenticate(request);
             return buildTokenResponse(user);
+
+        } catch (BadCredentialsException e) {
+            return AuthResponse.error(
+                    "AUTH-401",
+                    "Invalid Credentials",
+                    "The email or password you entered is incorrect."
+            );
+
         } catch (Exception e) {
-            return AuthResponse.error("AUTH-001", "Authentication failed", e.getMessage());
+            return AuthResponse.error(
+                    "SYS-500",
+                    "Server Error",
+                    "Something went wrong on our end. Please try again."
+            );
         }
     }
+
 
     @Transactional // Protects the database write operation
     public AuthResponse register(RegisterRequest request) {
@@ -73,10 +89,11 @@ public class AuthService {
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         user.setRole(User.Role.USER);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        // Call the new helper method!
-        return buildTokenResponse(user);
+        auditService.logAction("USER_REGISTER", "New user registered: " + savedUser.getEmail(), savedUser);
+
+        return buildTokenResponse(savedUser);
     }
 
 

@@ -29,6 +29,7 @@ export default function LoginPage() {
     try {
       const res = await loginUser(form);
       if (res.data.success) {
+        const userRole = res.data.data.user?.role?.toUpperCase() || 'USER';
         login(
           {
             accessToken:  res.data.data.accessToken,
@@ -36,41 +37,64 @@ export default function LoginPage() {
           },
           res.data.data.user
         );
-        navigate('/plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
+        if (userRole === 'ADMIN') {
+            navigate('/admin/overview', { state: { toast: 'Admin login successful! 👑' } });
+        } else {
+            navigate('/plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
+        }
       } else {
         setError(res.data.error?.message || 'Login failed');
       }
     } catch (err) {
-      setError(err.response?.data?.error?.message || 'Invalid credentials');
+      if (!err.response) {
+        setError('Cannot connect to the server. Please check your connection or try again later.');
+      } else {
+        setError(err.response?.data?.error?.message || 'Invalid email or password.');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
-    try {
-      const res = await googleAuth(tokenResponse.access_token);
-      if (res.data.success) {
-        login(
-          {
-            accessToken:  res.data.data.accessToken,
-            refreshToken: res.data.data.refreshToken,
-          },
-          res.data.data.user
-        );
-        navigate('/plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
-      } else {
-        setError(res.data.error?.message || 'Google login failed');
+    onSuccess: async (tokenResponse) => {
+      setError('');
+      setLoading(true); 
+      
+      try {
+        const res = await googleAuth(tokenResponse.access_token);
+        if (res.data.success) {
+          const userRole = res.data.data.user?.role?.toUpperCase() || 'USER';
+          login(
+            {
+              accessToken:  res.data.data.accessToken,
+              refreshToken: res.data.data.refreshToken,
+            },
+            res.data.data.user
+          );
+          if (userRole === 'ADMIN') {
+              navigate('/admin/overview', { state: { toast: 'Admin login successful! 👑' } });
+          } else {
+              navigate('/plants', { state: { toast: 'Login successful! Welcome back 🌿' } });
+          }
+        } else {
+          setError(res.data.error?.message || 'Google login failed');
+        }
+      } catch (err) {
+        if (!err.response) {
+          setError('Cannot connect to the server. Please try again later.');
+        } else {
+          setError(err.response?.data?.error?.message || 'Google login failed. Please try again.');
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
+    },
+    onError: () => {
       setError('Google login failed. Please try again.');
+      setLoading(false);
     }
-  },
-  onError: () => {
-    setError('Google login failed. Please try again.');
-  }
-});
+  });
 
   return (
     <div className="auth-page">
@@ -166,14 +190,15 @@ export default function LoginPage() {
               <span>Or continue with</span>
             </div>
 
-            <button type="button" className="auth-google-btn" onClick={() => handleGoogleLogin()}>
+            <button type="button" className="auth-google-btn" onClick={() => handleGoogleLogin()} disabled={loading} style={{ opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}>
               <img
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
                 width={20}
                 height={20}
+                style={{ filter: loading ? 'grayscale(100%)' : 'none' }}
               />
-              Sign in with Google
+              {loading ? 'Please wait...' : 'Sign in with Google'}
             </button>
 
           </form>

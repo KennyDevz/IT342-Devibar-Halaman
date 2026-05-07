@@ -40,6 +40,9 @@ public class User implements UserDetails {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(length = 20)
+    private String status = "ACTIVE";
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -64,6 +67,8 @@ public class User implements UserDetails {
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled()               { return true; }
 
+
+
     // --- Getters ---
     public UUID getUserId()            { return userId; }
     public String getEmail()           { return email; }
@@ -73,6 +78,7 @@ public class User implements UserDetails {
     public String getLastName()        { return lastName; }
     public Role getRole()              { return role; }
     public LocalDateTime getCreatedAt(){ return createdAt; }
+    public String getStatus() { return status; }
 
     // --- Setters ---
     public void setUserId(UUID userId)             { this.userId = userId; }
@@ -82,5 +88,6 @@ public class User implements UserDetails {
     public void setFirstName(String firstName)     { this.firstName = firstName; }
     public void setLastName(String lastName)       { this.lastName = lastName; }
     public void setRole(Role role)                 { this.role = role; }
+    public void setStatus(String status) { this.status = status; }
 
 }

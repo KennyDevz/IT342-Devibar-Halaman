@@ -34,8 +34,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.authenticate("STANDARD", request);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        }
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
 
-        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+        if (response.getError() != null && "SYS-500".equals(response.getError().getCode())) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
         return ResponseEntity.status(status).body(response);
     }
 
