@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.time.LocalDateTime;
 
@@ -48,12 +49,23 @@ public class AuthService {
 
             User user = strategy.authenticate(request);
 
-            if (user != null && !user.getIsVerified()) {
-                return AuthResponse.error(
-                        "AUTH-403",
-                        "Account Not Verified",
-                        "Please verify your email before logging in. Check your inbox for the OTP code."
-                );
+            if (user != null) {
+
+                if (!user.getIsVerified()) {
+                    return AuthResponse.error(
+                            "AUTH-403",
+                            "Account Not Verified",
+                            "Please verify your email before logging in. Check your inbox for the OTP code."
+                    );
+                }
+
+                if (!Objects.equals(user.getStatus(), "ACTIVE")) {
+                    return AuthResponse.error(
+                            "AUTH-403",
+                            "Account Suspended",
+                            "Your account is currently suspended. Please contact support."
+                    );
+                }
             }
 
             return buildTokenResponse(user);
