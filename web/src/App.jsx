@@ -1,21 +1,21 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import MyPlantsPage from './pages/user/MyPlantsPage';
+import { AuthProvider } from './core/AuthContext';
+import LoginPage from './features/auth/pages/LoginPage';
+import RegisterPage from './features/auth/pages/RegisterPage';
+import MyPlantsPage from './features/plants/pages/MyPlantsPage';
 import DashboardLayout from './components/DashboardLayout';
-import CareSchedulePage from './pages/user/CareSchedulePage';
-import GrowthGalleryPage from './pages/user/GrowthGalleryPage'; 
-import RecycleBinPage from './pages/user/RecycleBinPage';
-import SettingsPage from './pages/user/SettingsPage';
-import AdminLayout from './components/admin/AdminLayout';
-import AdminRoute from './components/admin/AdminRoute';
-import ProtectedRoute from './components/ProtectedRoute';   
-import AdminOverviewPage from './pages/admin/AdminOverviewPage';
-import AdminUsersPage from './pages/admin/UserManagementPage';
-import ImageModerationPage from './pages/admin/ImageModerationPage';
-import { PlantProvider } from './context/PlantContext';
-import VerifyOtpPage from './pages/VerifyOtpPage';
+import CareSchedulePage from './features/schedule/pages/CareSchedulePage';
+import GrowthGalleryPage from './features/plants/pages/GrowthGalleryPage'; 
+import RecycleBinPage from './features/plants/pages/RecycleBinPage';
+import SettingsPage from './features/settings/pages/SettingsPage';
+import AdminLayout from './features/admin/components/AdminLayout';
+import AdminRoute from './core/AdminRoute';
+import ProtectedRoute from './core/ProtectedRoute';
+import AdminOverviewPage from './features/admin/pages/AdminOverviewPage';
+import AdminUsersPage from './features/admin/pages/UserManagementPage';
+import ImageModerationPage from './features/admin/pages/ImageModerationPage';
+import { PlantProvider } from './features/plants/context/PlantContext';
+import VerifyOtpPage from './features/auth/pages/VerifyOtpPage';
 
 export default function App() {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../core/AuthContext';
 import { Leaf, Calendar, Image, Trash2, Settings, LogOut } from 'lucide-react';
 import LogoutModal from './LogoutModal';
 import '../styles/sidebar.css'; 
