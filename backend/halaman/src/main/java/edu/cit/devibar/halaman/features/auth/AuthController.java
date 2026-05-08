@@ -1,0 +1,85 @@
+package edu.cit.devibar.halaman.features.auth;
+
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+
+    // POST /api/v1/auth/register
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        AuthResponse response = authService.register(request);
+        HttpStatus status = response.isSuccess() ? HttpStatus.CREATED : HttpStatus.CONFLICT;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    // POST /api/v1/auth/login
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        AuthResponse response = authService.authenticate("STANDARD", request);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        }
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+
+        if (response.getError() != null && "SYS-500".equals(response.getError().getCode())) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        return ResponseEntity.status(status).body(response);
+    }
+
+    // POST /api/auth/oauth/google
+    @PostMapping("/oauth/google")
+    public ResponseEntity<AuthResponse> googleAuth(@Valid @RequestBody GoogleAuthRequest request) {
+        AuthResponse response = authService.authenticate("GOOGLE", request);
+
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    // GET /api/v1/auth/me
+    @GetMapping("/me")
+    public ResponseEntity<AuthResponse> getCurrentUser(@AuthenticationPrincipal User user) {
+        AuthResponse.UserDto userDto = new AuthResponse.UserDto();
+        userDto.setUserId(user.getUserId().toString());
+        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setRole(user.getRole().name());
+
+        AuthResponse.DataPayload dataPayload = new AuthResponse.DataPayload();
+        dataPayload.setUser(userDto);
+
+        return ResponseEntity.ok(AuthResponse.success(dataPayload));
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<AuthResponse> verifyOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otpCode = request.get("otpCode");
+
+        AuthResponse response = authService.verifyOtp(email, otpCode);
+
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @PostMapping("/resend-otp")
+    public ResponseEntity<?> resendOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        return ResponseEntity.ok(authService.resendOtp(email));
+    }
+}
