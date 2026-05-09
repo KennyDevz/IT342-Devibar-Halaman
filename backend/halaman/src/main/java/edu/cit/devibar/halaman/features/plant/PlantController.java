@@ -135,6 +135,21 @@ public class PlantController {
         }
     }
 
+    // DELETE /api/plants/{plantId}/images/{imageId}
+    @DeleteMapping("/{plantId}/images/{imageId}")
+    public ResponseEntity<?> deleteImage(
+            @PathVariable UUID plantId,
+            @PathVariable UUID imageId) {
+
+        try {
+            plantImageService.deleteImage(plantId, imageId);
+            return ResponseEntity.ok().body("Image deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Deletion failed: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/{plantId}/images/history")
     public ResponseEntity<List<PlantImageResponse>> getPlantImageHistory(@PathVariable UUID plantId) {
         List<PlantImageResponse> history = plantImageService.getImageHistory(plantId);

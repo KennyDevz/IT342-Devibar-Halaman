@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { getPlantImageHistory } from '../api/plantApi';
-import { Upload } from 'lucide-react';
+import { getPlantImageHistory, deletePlantImage } from '../api/plantApi';
+import { Upload, Trash2, AlertTriangle } from 'lucide-react';
 import UploadMilestoneModal from './UploadMilestoneModal';
 import '../../../styles/gallery.css';
 
@@ -10,6 +10,9 @@ export default function GrowthTimeline({ plantId }) {
     const [error, setError] = useState(null);
     const [sortOrder, setSortOrder] = useState('desc');
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [imageToDelete, setImageToDelete] = useState(null); 
+    const [isDeleting, setIsDeleting] = useState(false); 
 
     const fetchHistory = async () => {
         setLoading(true);
@@ -31,6 +34,22 @@ export default function GrowthTimeline({ plantId }) {
             fetchHistory();
         }
     }, [plantId]);
+
+    const confirmDelete = async () => {
+        if (!imageToDelete) return;
+        
+        setIsDeleting(true);
+        try {
+            await deletePlantImage(plantId, imageToDelete);
+            await fetchHistory(); 
+            setImageToDelete(null); 
+        } catch (err) {
+            console.error("Failed to delete milestone", err);
+            alert("Failed to delete the milestone. Please try again.");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
     // Helpers
     const formatDate = (dateString) => {
@@ -102,6 +121,13 @@ export default function GrowthTimeline({ plantId }) {
                                     <div className="milestone-date">
                                         <span className="calendar-icon">📅</span> {formatDate(record.uploadedAt)}
                                     </div>
+                                    <button 
+                                            onClick={() => setImageToDelete(record.imageId)}
+                                            style={{ background: 'none', border: 'none', color: '#dc2626', cursor: 'pointer', padding: '4px' }}
+                                            title="Delete Milestone"
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
                                     <p className="milestone-caption">
                                         {record.caption ? `"${record.caption}"` : "No caption provided."}
                                     </p>
@@ -109,6 +135,35 @@ export default function GrowthTimeline({ plantId }) {
                             </div>
                         );
                     })}
+                </div>
+            )}
+
+            {imageToDelete && (
+                <div className="custom-modal-overlay">
+                    <div className="custom-modal-content">
+                        <div className="custom-modal-icon">
+                            <AlertTriangle size={32} color="#dc2626" />
+                        </div>
+                        <h3>Delete Milestone?</h3>
+                        <p>Are you sure you want to delete this photo? This action cannot be undone and it will be removed from your timeline permanently.</p>
+                        
+                        <div className="custom-modal-actions">
+                            <button 
+                                className="btn-cancel" 
+                                onClick={() => setImageToDelete(null)}
+                                disabled={isDeleting}
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                className="btn-confirm-delete" 
+                                onClick={confirmDelete}
+                                disabled={isDeleting}
+                            >
+                                {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
 
