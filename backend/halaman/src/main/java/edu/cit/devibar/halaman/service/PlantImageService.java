@@ -6,6 +6,7 @@ import edu.cit.devibar.halaman.entity.PlantImage;
 import edu.cit.devibar.halaman.repository.PlantImageRepository;
 import edu.cit.devibar.halaman.repository.PlantRepository;
 import edu.cit.devibar.halaman.service.storage.ImageStorageAdapter;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +48,21 @@ public class PlantImageService {
     public List<PlantImageResponse> getImageHistory(UUID plantId) {
         return plantImageRepository.findByPlantPlantIdAndDeletedAtIsNullOrderByUploadedAtAsc(plantId)
                 .stream()
-                .map(image -> new PlantImageResponse(image.getFileUrl(), image.getUploadedAt(), image.getCaption()))
+                .map(image -> new PlantImageResponse(image.getImageId(),image.getFileUrl(), image.getUploadedAt(), image.getCaption()))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteImage(UUID plantId, UUID imageId) {
+        PlantImage image = plantImageRepository.findById(imageId)
+                .orElseThrow(() -> new RuntimeException("Image not found"));
+
+        if (!image.getPlant().getPlantId().equals(plantId)) {
+            throw new RuntimeException("Image does not belong to this plant");
+        }
+
+        storageAdapter.deleteImage(image.getFileUrl());
+
+        plantImageRepository.delete(image);
     }
 }

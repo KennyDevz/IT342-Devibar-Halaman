@@ -7,7 +7,7 @@ import { Plus, Search, ChevronDown, Bell } from 'lucide-react';
 import PlantCard from '../../components/plant/PlantCard';
 import AddPlantModal from '../../components/plant/AddPlantModal';
 import EditPlantModal from '../../components/plant/EditPlantModal';
-import DeleteModal from '../../components/plant/DeleteModal';
+import DeletePlantModal from '../../components/plant/DeletePlantModal';
 import PlantDetailsPage from './PlantDetailsPage';
 import { getCurrentWeather } from '../../api/plantApi';
 import '../../styles/plant.css';

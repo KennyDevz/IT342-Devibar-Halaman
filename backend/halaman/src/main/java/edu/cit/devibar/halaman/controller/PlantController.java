@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/plants")
-public class PlantController {
+public class    PlantController {
 
     private final PlantService plantService;
     private final PlantImageService plantImageService;
@@ -137,6 +137,21 @@ public class PlantController {
 
         } catch (Exception e) {
             return ApiResponseFactory.error(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch images");
+        }
+    }
+
+    // DELETE /api/plants/{plantId}/images/{imageId}
+    @DeleteMapping("/{plantId}/images/{imageId}")
+    public ResponseEntity<?> deleteImage(
+            @PathVariable UUID plantId,
+            @PathVariable UUID imageId) {
+
+        try {
+            plantImageService.deleteImage(plantId, imageId);
+            return ResponseEntity.ok().body("Image deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Deletion failed: " + e.getMessage());
         }
     }
 

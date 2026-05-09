@@ -10,6 +10,10 @@ export const uploadPlantImage = (id, formData) =>
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 
+export const deletePlantImage = (plantId, imageId) => {
+    return api.delete(`/api/plants/${plantId}/images/${imageId}`);
+};
+
 export const getPlantImages = (id) => api.get(`/api/plants/${id}/images`);
 export const getPlantSchedule = (plantId) => api.get(`/api/plants/${plantId}/schedule`);
 
