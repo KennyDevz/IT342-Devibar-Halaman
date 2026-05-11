@@ -77,4 +77,16 @@ public class CareScheduleServiceTest {
         verify(careScheduleRepository, times(1))
                 .findFirstByPlantPlantIdAndTaskTypeAndDeletedAtIsNull(mockPlantId, "WATERING");
     }
+
+    @Test
+    void getWateringScheduleForPlant_ShouldReturnEmptyOptional_WhenNotFound() {
+        when(careScheduleRepository.findFirstByPlantPlantIdAndTaskTypeAndDeletedAtIsNull(mockPlantId, "WATERING"))
+                .thenReturn(Optional.empty());
+
+        Optional<CareSchedule> result = careScheduleService.getWateringScheduleForPlant(mockPlantId);
+
+        assertFalse(result.isPresent());
+        verify(careScheduleRepository, times(1))
+                .findFirstByPlantPlantIdAndTaskTypeAndDeletedAtIsNull(mockPlantId, "WATERING");
+    }
 }

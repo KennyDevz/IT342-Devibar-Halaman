@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 public class MaintenanceLogServiceTest {
@@ -102,5 +103,32 @@ public class MaintenanceLogServiceTest {
         // Verify the repository was queried correctly
         verify(maintenanceLogRepository, times(1))
                 .findByPlantPlantIdAndDeletedAtIsNullOrderByCompletedAtDesc(mockPlantId);
+    }
+
+    @Test
+    void logCareAction_ShouldThrowException_WhenPlantNotFound() {
+        MaintenanceLogRequest request = new MaintenanceLogRequest();
+        request.setPlantId(mockPlantId);
+        
+        when(plantRepository.findById(mockPlantId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            maintenanceLogService.logCareAction(request);
+        });
+
+        assertEquals("Plant not found", exception.getMessage());
+        verify(maintenanceLogRepository, never()).save(any(MaintenanceLog.class));
+        verify(eventPublisher, never()).publishEvent(any());
+    }
+
+    @Test
+    void getPlantMaintenanceLogs_ShouldReturnEmptyList_WhenNoLogs() {
+        when(maintenanceLogRepository.findByPlantPlantIdAndDeletedAtIsNullOrderByCompletedAtDesc(mockPlantId))
+                .thenReturn(Collections.emptyList());
+
+        List<MaintenanceLogResponse> responses = maintenanceLogService.getPlantMaintenanceLogs(mockPlantId);
+
+        assertNotNull(responses);
+        assertTrue(responses.isEmpty());
     }
 }
