@@ -208,5 +208,46 @@ public class AuthService {
         return AuthResponse.success(dataPayload);
     }
 
+    /**
+     * Step 1 of password reset: generate an OTP and email it to the user.
+     * Always returns success to avoid leaking whether the email exists.
+     */
+    @Transactional
+    public AuthResponse forgotPassword(String email) {
+        userRepository.findByEmail(email).ifPresent(user -> {
+            String otp = String.format("%06d", new Random().nextInt(999999));
+            user.setOtpCode(otp);
+            user.setOtpExpiry(LocalDateTime.now().plusMinutes(10));
+            userRepository.save(user);
+            emailService.sendPasswordResetEmail(user.getEmail(), user.getFirstName(), otp);
+        });
+        // Always succeed — don't reveal whether email is registered
+        return AuthResponse.success(null);
+    }
 
-}
+    /**
+     * Step 2 of password reset: verify the OTP and set the new password.
+     */
+    @Transactional
+    public AuthResponse resetPassword(String email, String otpCode, String newPassword) {
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        if (user == null || user.getOtpCode() == null) {
+            return AuthResponse.error("AUTH-007", "Invalid Request",
+                    "No password reset was requested for this email.");
+        }
+
+        if (!user.getOtpCode().equals(otpCode) || user.getOtpExpiry().isBefore(LocalDateTime.now())) {
+            return AuthResponse.error("AUTH-008", "Invalid or Expired Code",
+                    "The reset code is incorrect or has expired. Please request a new one.");
+        }
+
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        user.setOtpCode(null);
+        user.setOtpExpiry(null);
+        userRepository.save(user);
+
+        return AuthResponse.success(null);
+    }
+
+}

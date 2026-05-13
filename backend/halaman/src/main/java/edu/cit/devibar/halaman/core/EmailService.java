@@ -119,4 +119,60 @@ public class EmailService {
             System.err.println("Failed to send deletion warning email: " + e.getMessage());
         }
     }
-}
+
+    @Async
+    public void sendPasswordResetEmail(String toEmail, String firstName, String otpCode) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(toEmail);
+            helper.setSubject("🔑 Your Halaman Password Reset Code");
+
+            String htmlContent = String.format("""
+                <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+                    
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="color: #16a34a; margin: 0; font-size: 28px; letter-spacing: -0.5px;">🌿 Halaman</h1>
+                    </div>
+                    
+                    <h2 style="color: #1e293b; font-size: 20px; font-weight: 600; margin-bottom: 15px;">Hello, %s!</h2>
+                    
+                    <p style="color: #475569; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
+                        We received a request to reset your Halaman password. Use the code below to set a new password. This code expires in <strong>10 minutes</strong>.
+                    </p>
+                    
+                    <div style="text-align: center; margin: 35px 0;">
+                        <span style="display: inline-block; font-size: 36px; font-weight: 700; letter-spacing: 8px; color: #15803d; background-color: #f0fdf4; padding: 20px 40px; border-radius: 10px; border: 2px dashed #86efac;">
+                            %s
+                        </span>
+                    </div>
+
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <a href="http://localhost:5173/reset-password?email=%s" style="background-color: #16a34a; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: 600; display: inline-block; font-size: 16px;">
+                            Reset My Password
+                        </a>
+                    </div>
+                    
+                    <p style="color: #64748b; font-size: 14px; line-height: 1.5; text-align: center; background-color: #f8fafc; padding: 15px; border-radius: 8px;">
+                        <strong>Didn't request this?</strong> You can safely ignore this email. Your password will not be changed.
+                    </p>
+                    
+                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;" />
+                    
+                    <p style="text-align: center; color: #94a3b8; font-size: 13px; margin: 0;">
+                        Stay safe! 🌱<br/>
+                        <strong>The Halaman Team</strong>
+                    </p>
+                </div>
+                """, firstName, otpCode, toEmail);
+
+            helper.setText(htmlContent, true);
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            System.err.println("Failed to send password reset email: " + e.getMessage());
+            throw new RuntimeException("Failed to send email");
+        }
+    }
+}

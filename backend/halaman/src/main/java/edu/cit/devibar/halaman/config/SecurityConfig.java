@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("/api/weather/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers("/api/plants/**", "/api/maintenance/**").authenticated()
                         .anyRequest().authenticated()
                 )

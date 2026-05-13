@@ -82,4 +82,23 @@ public class AuthController {
         String email = request.get("email");
         return ResponseEntity.ok(authService.resendOtp(email));
     }
-}
+
+    // POST /api/auth/forgot-password
+    @PostMapping("/forgot-password")
+    public ResponseEntity<AuthResponse> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        return ResponseEntity.ok(authService.forgotPassword(email));
+    }
+
+    // POST /api/auth/reset-password
+    @PostMapping("/reset-password")
+    public ResponseEntity<AuthResponse> resetPassword(@RequestBody Map<String, String> request) {
+        String email      = request.get("email");
+        String otpCode    = request.get("otpCode");
+        String newPassword = request.get("newPassword");
+
+        AuthResponse response = authService.resetPassword(email, otpCode, newPassword);
+        HttpStatus status = response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(response);
+    }
+}

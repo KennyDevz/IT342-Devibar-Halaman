@@ -6,3 +6,5 @@ export const getCurrentUser = ()     => api.get('/api/auth/me');
 export const googleAuth = (token) => api.post('/api/auth/oauth/google', { token });
 export const verifyOtp      = (data) => api.post('/api/auth/verify-otp', data);
 export const resendOtp = (data) => api.post('/api/auth/resend-otp', data);
+export const forgotPassword = (data) => api.post('/api/auth/forgot-password', data);
+export const resetPassword  = (data) => api.post('/api/auth/reset-password', data);

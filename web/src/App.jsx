@@ -16,6 +16,8 @@ import AdminUsersPage from './features/admin/pages/UserManagementPage';
 import ImageModerationPage from './features/admin/pages/ImageModerationPage';
 import { PlantProvider } from './features/plants/context/PlantContext';
 import VerifyOtpPage from './features/auth/pages/VerifyOtpPage';
+import ForgotPasswordPage from './features/auth/pages/ForgotPasswordPage';
+import ResetPasswordPage from './features/auth/pages/ResetPasswordPage';
 
 export default function App() {
   return (
@@ -26,6 +28,8 @@ export default function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/verify" element={<VerifyOtpPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             
             {/* Protect and Wrap My Plants Page */}
             <Route path="/plants" element={
