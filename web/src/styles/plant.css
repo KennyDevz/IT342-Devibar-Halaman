@@ -1048,3 +1048,179 @@
   margin: 0;
   max-width: 280px;
 }
+
+/* ================================
+   NOTIFICATION SIDEBAR
+   ================================ */
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.50);
+  z-index: 9999;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drawer {
+  background: #fff;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawer-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #F3F4F6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.drawer-header h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #101828;
+  margin: 0;
+}
+
+.drawer-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 0;
+  background: transparent;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.notification-image-wrapper {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.notification-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.notification-image-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: #F1F5F9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.notification-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+.notification-badge.overdue {
+  background: #F97316;
+}
+
+.notification-badge.due-today {
+  background: #2E7D32;
+}
+
+.notification-content-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.notification-status-text {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.notification-status-text.overdue {
+  color: #F97316;
+}
+
+.notification-status-text.due-today {
+  color: #2E7D32;
+}
+
+.notification-time {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  color: #9CA3AF;
+  font-weight: 500;
+}
+
+.notification-nickname {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.notification-desc {
+  font-size: 0.8rem;
+  color: #9CA3AF;
+  margin: 0;
+}
+
+.notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6A7282;
+  text-align: center;
+  gap: 1rem;
+}
+
+.notification-empty svg {
+  color: #99A1AF;
+}
+
+.notification-empty p {
+  margin: 0;
+  font-size: 0.95rem;
+}

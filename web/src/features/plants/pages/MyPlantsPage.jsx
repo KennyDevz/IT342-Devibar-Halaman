@@ -8,6 +8,7 @@ import PlantCard from '../components/PlantCard';
 import AddPlantModal from '../components/AddPlantModal';
 import EditPlantModal from '../components/EditPlantModal';
 import DeleteModal from '../components/DeletePlantModal';
+import NotificationSidebar from '../components/NotificationSidebar';
 import PlantDetailsPage from './PlantDetailsPage';
 import { getCurrentWeather } from '../api/plantApi';
 import '../../../styles/plant.css';
@@ -32,6 +33,7 @@ export default function MyPlantsPage() {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingPlant, setEditingPlant] = useState(null);
   const [deletingPlant, setDeletingPlant] = useState(null);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   // --- CLEAN DATE LOGIC ---
   const getPlantStatus = (plant) => {
@@ -102,9 +104,11 @@ export default function MyPlantsPage() {
     return isDay ? '☀️' : '🌙'; // Fallback
 };
 
-  const attentionCount = plants.filter(
-    p => getPlantStatus(p) === 'Due Today' || getPlantStatus(p) === 'Overdue'
-  ).length;
+  const attentionPlantsList = plants
+    .map(p => ({ ...p, status: getPlantStatus(p) }))
+    .filter(p => p.status === 'Due Today' || p.status === 'Overdue');
+    
+  const attentionCount = attentionPlantsList.length;
 
   const filteredPlants = plants.filter(plant => {
     const matchesSearch = 
@@ -154,7 +158,7 @@ export default function MyPlantsPage() {
             </div>
 
             <div className="topbar-actions">
-              <button className="btn-bell">
+              <button className="btn-bell" onClick={() => setIsNotificationOpen(true)}>
                 <Bell size={24} />
                 {attentionCount > 0 && <span className="bell-badge"></span>}
               </button>
@@ -266,6 +270,13 @@ export default function MyPlantsPage() {
       {isAddOpen && <AddPlantModal onClose={() => setIsAddOpen(false)} onSuccess={handleAddSuccess} />}
       {editingPlant && <EditPlantModal plant={editingPlant} onClose={() => setEditingPlant(null)} onSuccess={handleEditSuccess} />}
       {deletingPlant && <DeleteModal plant={deletingPlant} onClose={() => setDeletingPlant(null)} onSuccess={handleDeleteSuccess} />}
+      
+      <NotificationSidebar 
+        isOpen={isNotificationOpen} 
+        onClose={() => setIsNotificationOpen(false)} 
+        attentionPlants={attentionPlantsList}
+        onSelectPlant={(plant) => setSelectedPlant(plant)}
+      />
     </>
   );
 }
