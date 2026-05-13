@@ -195,4 +195,71 @@ public class AuthServiceTest {
         assertEquals("AUTH-006", response.getError().getCode());
         verify(userRepository, never()).save(mockUser);
     }
+
+    @Test
+    void forgotPassword_ShouldAlwaysSucceed() {
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockUser));
+
+        AuthResponse response = authService.forgotPassword("test@example.com");
+
+        assertTrue(response.isSuccess());
+        verify(userRepository).save(mockUser);
+        assertNotNull(mockUser.getOtpCode());
+        assertNotNull(mockUser.getOtpExpiry());
+        verify(emailService).sendPasswordResetEmail(eq("test@example.com"), anyString(), anyString());
+    }
+
+    @Test
+    void forgotPassword_UserNotFound_ShouldStillSucceed() {
+        when(userRepository.findByEmail("unknown@example.com")).thenReturn(Optional.empty());
+
+        AuthResponse response = authService.forgotPassword("unknown@example.com");
+
+        assertTrue(response.isSuccess());
+        verify(userRepository, never()).save(any());
+        verify(emailService, never()).sendPasswordResetEmail(anyString(), anyString(), anyString());
+    }
+
+    @Test
+    void resetPassword_Success() {
+        mockUser.setOtpCode("123456");
+        mockUser.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
+        
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockUser));
+        when(passwordEncoder.encode("newPassword")).thenReturn("newHashedPassword");
+
+        AuthResponse response = authService.resetPassword("test@example.com", "123456", "newPassword");
+
+        assertTrue(response.isSuccess());
+        assertEquals("newHashedPassword", mockUser.getPasswordHash());
+        assertNull(mockUser.getOtpCode());
+        verify(userRepository).save(mockUser);
+    }
+
+    @Test
+    void resetPassword_InvalidCode_ReturnsError() {
+        mockUser.setOtpCode("123456");
+        mockUser.setOtpExpiry(LocalDateTime.now().plusMinutes(5));
+        
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockUser));
+
+        AuthResponse response = authService.resetPassword("test@example.com", "wrong", "newPassword");
+
+        assertFalse(response.isSuccess());
+        assertEquals("AUTH-008", response.getError().getCode());
+    }
+
+    @Test
+    void resetPassword_ExpiredCode_ReturnsError() {
+        mockUser.setOtpCode("123456");
+        mockUser.setOtpExpiry(LocalDateTime.now().minusMinutes(1));
+        
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Optional.of(mockUser));
+
+        AuthResponse response = authService.resetPassword("test@example.com", "123456", "newPassword");
+
+        assertFalse(response.isSuccess());
+        assertEquals("AUTH-008", response.getError().getCode());
+    }
 }
+
