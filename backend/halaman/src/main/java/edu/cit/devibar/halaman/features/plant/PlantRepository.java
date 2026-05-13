@@ -29,6 +29,9 @@ public interface PlantRepository extends JpaRepository<Plant, UUID> {
 
     List<Plant> findByDeletedAtLessThanEqual(LocalDateTime thresholdDate);
 
+    // Find ALL plants (active + soft-deleted) for a given user — used during account deletion
+    List<Plant> findByUserUserId(UUID userId);
+
     @Query("SELECT DISTINCT p FROM Plant p LEFT JOIN FETCH p.images WHERE p.deletedAt <= :threshold")
     List<Plant> findOldPlantsWithImages(@Param("threshold") LocalDateTime threshold);
 
