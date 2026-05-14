@@ -18,7 +18,6 @@ export default function GrowthTimeline({ plantId }) {
         setLoading(true);
         try {
             const response = await getPlantImageHistory(plantId);
-            console.log("🔥 RAW BACKEND DATA:", response.data);
             setHistory(response.data);
             setError(null);
         } catch (err) {
