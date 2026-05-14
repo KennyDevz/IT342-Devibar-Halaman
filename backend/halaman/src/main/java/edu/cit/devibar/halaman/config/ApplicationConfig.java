@@ -1,6 +1,6 @@
 package edu.cit.devibar.halaman.config;
 
-import edu.cit.devibar.halaman.repository.UserRepository;
+import edu.cit.devibar.halaman.features.auth.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
