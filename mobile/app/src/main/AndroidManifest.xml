@@ -28,7 +28,17 @@
             android:name=".ui.auth.RegisterActivity"
             android:exported="false"/>
         <activity
-            android:name=".ui.auth.DashboardActivity"
+            android:name=".ui.auth.VerifyOtpActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".ui.PlantDetailsActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".ui.GrowthTimelineActivity"
             android:exported="false"/>
     </application>
 
