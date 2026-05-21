@@ -60,15 +60,9 @@ class RegisterActivity : AppCompatActivity() {
         btnRegister         = findViewById(R.id.btnRegister)
         tvTerms             = findViewById(R.id.tvTerms)
         tvSignIn            = findViewById(R.id.tvSignIn)
-        btnBack             = findViewById(R.id.btnBack)
 
         // Set Terms of Service styled text
         setTermsText()
-
-        // Back button
-        btnBack.setOnClickListener {
-            finish()
-        }
 
         // Navigate to Login
         tvSignIn.setOnClickListener {
@@ -84,9 +78,8 @@ class RegisterActivity : AppCompatActivity() {
         viewModel.registerResult.observe(this) { result ->
             result.onSuccess { response ->
                 if (response.success) {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.putExtra("success_message", "Account created! Please log in.")
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    val intent = Intent(this, VerifyOtpActivity::class.java)
+                    intent.putExtra("EMAIL", etEmail.text.toString().trim())
                     startActivity(intent)
                     finish()
                 } else {

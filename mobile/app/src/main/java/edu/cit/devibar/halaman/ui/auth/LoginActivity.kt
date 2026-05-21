@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import edu.cit.devibar.halaman.R
+import edu.cit.devibar.halaman.api.RetrofitClient
+import edu.cit.devibar.halaman.ui.MainActivity
 import edu.cit.devibar.halaman.utils.ToastHelper
 import edu.cit.devibar.halaman.viewmodel.AuthViewModel
 
@@ -67,6 +69,7 @@ class LoginActivity : AppCompatActivity() {
             result.onSuccess { response ->
                 if (response.success) {
                     // Save tokens
+                    RetrofitClient.authToken = response.data?.accessToken
                     val prefs = getSharedPreferences("halaman_prefs", MODE_PRIVATE)
                     prefs.edit()
                         .putString("access_token", response.data?.accessToken)
@@ -77,8 +80,8 @@ class LoginActivity : AppCompatActivity() {
                         .putString("user_role", response.data?.user?.role)
                         .apply()
 
-                    // Navigate to Dashboard
-                    val intent = Intent(this, DashboardActivity::class.java)
+                    // Navigate to Dashboard (MainActivity)
+                    val intent = Intent(this, MainActivity::class.java)
                     intent.putExtra("success_message", "Login successful! Welcome back 🌿")
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                             Intent.FLAG_ACTIVITY_CLEAR_TASK

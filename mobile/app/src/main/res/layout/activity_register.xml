@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#F1F6F2">
 
-    <!-- Background image — sits behind everything -->
+    <!-- Background image overlay -->
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,10 +13,10 @@
         android:scaleType="centerCrop"
         android:alpha="0.10"/>
 
-    <!-- Scrollable content on top of background -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,103 +24,36 @@
             android:orientation="vertical"
             android:padding="32dp">
 
-            <!-- Top Row: Back button + Logo -->
+            <!-- 1. Logo (Icon only, centered) -->
             <LinearLayout
-                android:id="@+id/topRow"
-                android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="8dp">
-
-                <!-- Back Button -->
-                <LinearLayout
-                    android:id="@+id/btnBack"
-                    android:layout_width="46dp"
-                    android:layout_height="46dp"
-                    android:background="@drawable/bg_input_glass"
-                    android:gravity="center"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_arrow_back"
-                        />
-
-                </LinearLayout>
-
-                <!-- Spacer -->
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <!-- Small Logo -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <LinearLayout
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="@drawable/bg_logo_icon"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:src="@drawable/ic_leaf"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Halaman"
-                        android:textColor="@color/text_primary"
-                        android:textSize="20sp"
-                        android:textStyle="bold|italic"
-                        android:fontFamily="sans-serif-black"
-                        android:textAllCaps="true"
-                        android:layout_marginStart="8dp"/>
-
-                </LinearLayout>
-
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_logo_icon"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_leaf"/>
             </LinearLayout>
 
-            <!-- Title Section -->
+            <!-- 2. Create Account Header -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Join Halaman"
+                android:layout_marginTop="32dp"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="Create Account"
                 android:textColor="@color/text_primary"
-                android:textSize="30sp"
-                android:fontFamily="sans-serif-black"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="32dp"/>
+                android:textSize="28sp"
+                android:textStyle="bold"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="START YOUR GROWTH JOURNEY."
-                android:textColor="#B32E7D32"
-                android:textSize="14sp"
-                android:fontFamily="sans-serif-black"
-                android:textAllCaps="true"
-                android:letterSpacing="0.1"
-                android:gravity="center"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="32dp"/>
-
-            <!-- First Name + Last Name Row -->
+            <!-- 3. Inputs -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:orientation="horizontal"
                 android:weightSum="2"
                 android:layout_marginBottom="16dp">
@@ -132,7 +65,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginEnd="8dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -144,13 +76,11 @@
                         android:letterSpacing="0.1"
                         android:layout_marginStart="4dp"
                         android:layout_marginBottom="6dp"/>
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilFirstName"
                         style="@style/HalamanTextInputStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etFirstName"
                             android:layout_width="match_parent"
@@ -158,14 +88,8 @@
                             android:hint="Leafy"
                             android:inputType="textPersonName"
                             android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:textSize="16sp"
-                            android:textColor="@color/text_primary"
-                            android:textColorHint="#FFD1D5DC"
-                            android:fontFamily="sans-serif-medium"/>
-
+                            android:paddingEnd="20dp" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
 
                 <!-- Last Name -->
@@ -175,7 +99,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:layout_marginStart="8dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -187,13 +110,11 @@
                         android:letterSpacing="0.1"
                         android:layout_marginStart="4dp"
                         android:layout_marginBottom="6dp"/>
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilLastName"
                         style="@style/HalamanTextInputStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etLastName"
                             android:layout_width="match_parent"
@@ -201,19 +122,12 @@
                             android:hint="Green"
                             android:inputType="textPersonName"
                             android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:textSize="16sp"
-                            android:textColor="@color/text_primary"
-                            android:textColorHint="#FFD1D5DC"
-                            android:fontFamily="sans-serif-medium"/>
-
+                            android:paddingEnd="20dp" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
-
             </LinearLayout>
 
-            <!-- Email Label -->
+            <!-- Email -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -225,15 +139,12 @@
                 android:letterSpacing="0.1"
                 android:layout_marginStart="4dp"
                 android:layout_marginBottom="6dp"/>
-
-            <!-- Email Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
                 style="@style/HalamanTextInputStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp">
-
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmail"
                     android:layout_width="match_parent"
@@ -241,15 +152,10 @@
                     android:hint="example@halaman.com"
                     android:inputType="textEmailAddress"
                     android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_primary"
-                    android:textColorHint="#FFD1D5DC"
-                    android:fontFamily="sans-serif-medium"/>
-
+                    android:paddingEnd="20dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Password Label -->
+            <!-- Password -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -261,18 +167,13 @@
                 android:letterSpacing="0.1"
                 android:layout_marginStart="4dp"
                 android:layout_marginBottom="6dp"/>
-
-            <!-- Password Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPassword"
                 style="@style/HalamanTextInputStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/halaman_green"
-                >
-
+                app:passwordToggleEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
@@ -280,15 +181,10 @@
                     android:hint="••••••••"
                     android:inputType="textPassword"
                     android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_primary"
-                    android:textColorHint="#FFD1D5DC"
-                    android:fontFamily="sans-serif-medium"/>
-
+                    android:paddingEnd="20dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Confirm Password Label -->
+            <!-- Confirm Password -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -300,18 +196,13 @@
                 android:letterSpacing="0.1"
                 android:layout_marginStart="4dp"
                 android:layout_marginBottom="6dp"/>
-
-            <!-- Confirm Password Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilConfirmPassword"
                 style="@style/HalamanTextInputStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:passwordToggleEnabled="true"
-                app:passwordToggleTint="@color/halaman_green"
-                >
-
+                android:layout_marginBottom="24dp"
+                app:passwordToggleEnabled="true">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etConfirmPassword"
                     android:layout_width="match_parent"
@@ -319,12 +210,7 @@
                     android:hint="••••••••"
                     android:inputType="textPassword"
                     android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:textSize="16sp"
-                    android:textColor="@color/text_primary"
-                    android:textColorHint="#FFD1D5DC"
-                    android:fontFamily="sans-serif-medium"/>
-
+                    android:paddingEnd="20dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Terms of Service -->
@@ -338,13 +224,13 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Create Account Button -->
+
+            <!-- 4. Create Account Button -->
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnRegister"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="@drawable/bg_button_green"
-                android:stateListAnimator="@null"
                 android:text="CREATE ACCOUNT"
                 android:textColor="@color/white"
                 android:textSize="14sp"
@@ -352,15 +238,14 @@
                 android:textAllCaps="true"
                 android:letterSpacing="0.1"/>
 
-            <!-- Already have account -->
+            <!-- 5. Sign In Link -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -368,7 +253,6 @@
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-medium"/>
-
                 <TextView
                     android:id="@+id/tvSignIn"
                     android:layout_width="wrap_content"
@@ -378,11 +262,8 @@
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-black"
                     android:textStyle="bold"/>
-
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
-
 </FrameLayout>

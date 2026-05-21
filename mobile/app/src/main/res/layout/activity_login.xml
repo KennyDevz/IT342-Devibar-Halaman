@@ -13,251 +13,194 @@
         android:scaleType="centerCrop"
         android:alpha="0.10"/>
 
-    <!-- Logo Row - Top -->
-    <LinearLayout
-        android:id="@+id/logoRow"
-        android:layout_width="wrap_content"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp"
-        android:layout_alignParentTop="true">
-
-        <LinearLayout
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_logo_icon"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_leaf"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Halaman"
-            android:textColor="@color/text_primary"
-            android:textSize="36sp"
-            android:textStyle="bold|italic"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:layout_marginStart="12dp"/>
-
-    </LinearLayout>
-
-    <!-- Center Content -->
-    <LinearLayout
-        android:id="@+id/centerContent"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:layout_centerVertical="true">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <!-- Welcome Text -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Welcome Back"
-            android:textColor="@color/text_primary"
-            android:textSize="30sp"
-            android:fontFamily="sans-serif-black"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="GROWTH BEGINS TODAY."
-            android:textColor="#B32E7D32"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:letterSpacing="0.1"
-            android:gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="32dp"/>
-
-        <!-- Email Label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EMAIL ADDRESS"
-            android:textColor="@color/halaman_green"
-            android:textSize="10sp"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:letterSpacing="0.1"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="6dp"/>
-
-        <!-- Email Input -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilEmail"
-            style="@style/HalamanTextInputStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:hint="example@halaman.com"
-                android:inputType="textEmailAddress"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:textSize="16sp"
-                android:textColor="@color/text_primary"
-                android:textColorHint="#FFD1D5DC"
-                android:fontFamily="sans-serif-medium"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Password Label -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PASSWORD"
-            android:textColor="@color/halaman_green"
-            android:textSize="10sp"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:letterSpacing="0.1"
-            android:layout_marginStart="4dp"
-            android:layout_marginBottom="6dp"/>
-
-        <!-- Password Input with eye toggle -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilPassword"
-            style="@style/HalamanTextInputStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/halaman_green"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:hint="••••••••"
-                android:inputType="textPassword"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:textSize="16sp"
-                android:textColor="@color/text_primary"
-                android:textColorHint="#FFD1D5DC"
-                android:fontFamily="sans-serif-medium"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Forgot Password -->
-        <TextView
-            android:id="@+id/tvForgotPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:text="FORGOT PASSWORD?"
-            android:textColor="#992E7D32"
-            android:textSize="12sp"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:letterSpacing="0.1"/>
-
-        <!-- Login Button -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/bg_button_green"
-            android:stateListAnimator="@null"
-            android:text="LOG IN"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:letterSpacing="0.1"/>
-
-        <!-- OR divider -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="OR QUICK ACCESS"
-            android:textColor="#662E7D32"
-            android:textSize="10sp"
-            android:fontFamily="sans-serif-black"
-            android:textAllCaps="true"
-            android:letterSpacing="0.2"
-            android:gravity="center"
-            android:layout_marginTop="20dp"/>
-
-        <!-- Google Button -->
         <LinearLayout
-            android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/bg_input_glass"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_google"/>
+            <!-- 1. Logo (Icon only) -->
+            <LinearLayout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_logo_icon"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_leaf" />
+            </LinearLayout>
 
+            <!-- 2. Welcome Back -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="Welcome Back"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <!-- 3. Email Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Continue with Google"
-                android:textColor="@color/text_label"
-                android:textSize="14sp"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.1"
+                android:text="EMAIL ADDRESS"
+                android:textAllCaps="true"
+                android:textColor="@color/halaman_green"
+                android:textSize="10sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                style="@style/HalamanTextInputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:hint="example@halaman.com"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- 4. Password Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.1"
+                android:text="PASSWORD"
+                android:textAllCaps="true"
+                android:textColor="@color/halaman_green"
+                android:textSize="10sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
+                style="@style/HalamanTextInputStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:passwordToggleEnabled="true">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:hint="••••••••"
+                    android:inputType="textPassword"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Forgot Password -->
+            <TextView
+                android:id="@+id/tvForgotPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:text="FORGOT PASSWORD?"
+                android:textColor="#992E7D32"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-black"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"/>
+
+            <!-- 5. Login Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bg_button_green"
+                android:fontFamily="sans-serif-black"
+                android:text="LOG IN"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <!-- 6. Divider -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginStart="12dp"/>
+                android:gravity="center"
+                android:text="or continue with"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <!-- 7. Continue to Google -->
+            <LinearLayout
+                android:id="@+id/btnGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_input_glass"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_google" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Continue with Google"
+                    android:textColor="@color/text_label"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- 8. Sign Up Link -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Don't have an account? "
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tvSignUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:text="Sign up"
+                    android:textColor="@color/halaman_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
         </LinearLayout>
-
-
-    </LinearLayout>
-
-    <!-- Sign Up Link - Bottom -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="32dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Don't have an account? "
-            android:textColor="@color/text_secondary"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif-medium"/>
-
-        <TextView
-            android:id="@+id/tvSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign up"
-            android:textColor="@color/halaman_green"
-            android:textSize="14sp"
-            android:fontFamily="sans-serif-black"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
-
+    </ScrollView>
 </RelativeLayout>
