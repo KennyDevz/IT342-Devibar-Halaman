@@ -5,7 +5,9 @@
     <color name="halaman_green_medium">#388E3C</color>
     <color name="halaman_green_light">#66BB6A</color>
     <color name="halaman_green_pale">#F0FDF4</color>
-       <color name="white">#FFFFFF</color>
+    <color name="gray_light">#99A1AF</color>
+    <color name="gray_dark">#101828</color>
+    <color name="white">#FFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="background">#F9FAFB</color>
     <color name="surface">#FFFFFF</color>
