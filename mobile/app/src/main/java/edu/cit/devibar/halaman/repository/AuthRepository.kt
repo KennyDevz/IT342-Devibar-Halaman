@@ -46,4 +46,39 @@ class AuthRepository {
             Result.failure(e)
         }
     }
+
+    suspend fun verifyOtp(
+        email: String,
+        otpCode: String
+    ): Result<AuthResponse> {
+        return try {
+            val response = apiService.verifyOtp(
+                edu.cit.devibar.halaman.model.VerifyOtpRequest(email, otpCode)
+            )
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception(response.body()?.error?.message ?: "OTP Verification failed"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun resendOtp(
+        email: String
+    ): Result<AuthResponse> {
+        return try {
+            val response = apiService.resendOtp(
+                edu.cit.devibar.halaman.model.ResendOtpRequest(email)
+            )
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception(response.body()?.error?.message ?: "Resend OTP failed"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

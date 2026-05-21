@@ -20,6 +20,13 @@ class AuthViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<Result<AuthResponse>>()
     val loginResult: LiveData<Result<AuthResponse>> = _loginResult
 
+    // --- OTP State ---
+    private val _otpResult = MutableLiveData<Result<AuthResponse>>()
+    val otpResult: LiveData<Result<AuthResponse>> = _otpResult
+
+    private val _resendOtpResult = MutableLiveData<Result<AuthResponse>>()
+    val resendOtpResult: LiveData<Result<AuthResponse>> = _resendOtpResult
+
     // --- Loading State ---
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -45,6 +52,25 @@ class AuthViewModel : ViewModel() {
             _isLoading.value = true
             val result = repository.login(email, password)
             _loginResult.value = result
+            _isLoading.value = false
+        }
+    }
+
+    // --- OTP ---
+    fun verifyOtp(email: String, otpCode: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val result = repository.verifyOtp(email, otpCode)
+            _otpResult.value = result
+            _isLoading.value = false
+        }
+    }
+
+    fun resendOtp(email: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val result = repository.resendOtp(email)
+            _resendOtpResult.value = result
             _isLoading.value = false
         }
     }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1F6F2">
+
+    <!-- Background image overlay -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/auth_bg"
+        android:scaleType="centerCrop"
+        android:alpha="0.10"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <!-- 1. Logo (Icon only, centered) -->
+            <LinearLayout
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="64dp"
+                android:background="@drawable/bg_logo_icon"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_leaf"/>
+            </LinearLayout>
+
+            <!-- 2. Verify OTP Header -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="sans-serif-black"
+                android:gravity="center"
+                android:text="@string/verify_otp"
+                android:textColor="@color/text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvEmailHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/enter_code_sent_to"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <!-- 3. OTP Input (6 Boxes) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.1"
+                android:text="@string/otp_code"
+                android:textAllCaps="true"
+                android:textColor="@color/halaman_green"
+                android:textSize="10sp" />
+
+            <LinearLayout
+                android:id="@+id/llOtpContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText android:id="@+id/etOtp1" style="@style/OtpBoxStyle" />
+                <EditText android:id="@+id/etOtp2" style="@style/OtpBoxStyle" />
+                <EditText android:id="@+id/etOtp3" style="@style/OtpBoxStyle" />
+                <EditText android:id="@+id/etOtp4" style="@style/OtpBoxStyle" />
+                <EditText android:id="@+id/etOtp5" style="@style/OtpBoxStyle" />
+                <EditText android:id="@+id/etOtp6" style="@style/OtpBoxStyle" />
+
+            </LinearLayout>
+
+            <!-- 4. Verify Button -->
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnVerify"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/bg_button_green"
+                android:text="@string/verify"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-black"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- 5. Back to Login / Resend? -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/didnt_receive_code"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/tvResend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resend"
+                    android:textColor="@color/halaman_green"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
